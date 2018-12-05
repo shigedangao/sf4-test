@@ -14,7 +14,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class Airliners
+ * Class PassengerAirliners
  * @package App\Resolvers
  */
 class Airliners implements ResolverInterface, AliasedInterface
@@ -26,7 +26,7 @@ class Airliners implements ResolverInterface, AliasedInterface
     protected $repository;
 
     /**
-     * Airliners constructor.
+     * PassengerAirliners constructor.
      * @param AirlinersRepository $airlinersRepository
      */
     public function __construct(AirlinersRepository $airlinersRepository)
@@ -47,7 +47,7 @@ class Airliners implements ResolverInterface, AliasedInterface
     public static function getAliases()
     {
         return [
-            'resolve' => 'Airliners'
+            'resolve' => 'PassengerAirliners'
         ];
     }
 }

@@ -11,7 +11,7 @@ namespace App\Doctrine;
 
 use App\Common\Saver\SaverInterface;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Airliners;
+use App\Entity\PassengerAirliners;
 
 class AirlinerSaver implements SaverInterface
 {
@@ -53,11 +53,11 @@ class AirlinerSaver implements SaverInterface
      * Create the entity based on the Model
      *
      * @param $object
-     * @return Airliners $object
+     * @return PassengerAirliners $object
      */
     public function create($object)
     {
-        $this->airliners = new Airliners(
+        $this->airliners = new PassengerAirliners(
             $object->engines,
             $object->distance,
             $object->reg,
@@ -77,7 +77,7 @@ class AirlinerSaver implements SaverInterface
      *
      * @param $dbObject
      */
-    public function update(Airliners $dbObject) {
+    public function update(PassengerAirliners $dbObject) {
         $dbObject->setPassenger($this->airliners->getPassenger());
         $dbObject->setReg($this->airliners->getReg());
         $dbObject->setAisle($this->airliners->getAisle());

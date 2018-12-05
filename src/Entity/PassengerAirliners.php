@@ -11,12 +11,12 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class Airliners
+ * Class PassengerAirliners
  * @package App\Entity
  *
  * @ORM\Entity
  */
-class Airliners extends AbstractAircraft
+class PassengerAirliners extends AbstractAircraft
 {
     /**
      * @var float
@@ -24,13 +24,6 @@ class Airliners extends AbstractAircraft
      * @ORM\Column(name="thrust", type="decimal")
      */
     protected $thrust;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="passenger", type="integer")
-     */
-    protected $passenger;
 
     /**
      * @var float
@@ -47,31 +40,29 @@ class Airliners extends AbstractAircraft
     protected $aisle;
 
     /**
-     * Airliners constructor
+     * PassengerAirliners constructor.
      *
-     * @param int $engines
-     * @param int $distance
-     * @param string $reg
-     * @param string $type
-     * @param string $name
-     * @param string $manufacturer
+     * @param float $thrust
+     * @param float $cargo
+     * @param int $passenger
+     * @param string $owner
+     * @param int $aisle
      */
     public function __construct(
-        int $engines,
-        int $distance,
-        string $reg,
-        string $type,
-        string $name,
-        string $manufacturer
-    ){
+        float $thrust,
+        float $cargo,
+        int $passenger,
+        string $owner,
+        int $aisle
+    ) {
         parent::__construct(
-            $engines,
-            $distance,
-            $reg,
-            $type,
-            $name,
-            $manufacturer
+            $passenger,
+            $owner
         );
+
+        $this->thrust = $thrust;
+        $this->cargo = $cargo;
+        $this->aisle = $aisle;
     }
 
     /**
@@ -88,22 +79,6 @@ class Airliners extends AbstractAircraft
     public function setThrust(float $thrust): void
     {
         $this->thrust = $thrust;
-    }
-
-    /**
-     * @return int
-     */
-    public function getPassenger(): int
-    {
-        return $this->passenger;
-    }
-
-    /**
-     * @param int $passenger
-     */
-    public function setPassenger(int $passenger): void
-    {
-        $this->passenger = $passenger;
     }
 
     /**

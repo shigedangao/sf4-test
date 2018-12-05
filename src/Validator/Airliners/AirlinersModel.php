@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class AirlinersModel
- * @package App\Validator\Airliners
+ * @package App\Validator\PassengerAirliners
  */
 class AirlinersModel
 {
