@@ -19,6 +19,15 @@ use Doctrine\ORM\Mapping as ORM;
 class PassengerAirliners extends AbstractAircraft
 {
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="id", type="integer")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="thrust", type="decimal")
@@ -38,6 +47,14 @@ class PassengerAirliners extends AbstractAircraft
      * @ORM\Column(name="aisle", type="integer")
      */
     protected $aisle;
+
+    /**
+     * @var
+     *
+     * @ORM\ManyToOne(targetEntity="BaseAircraft")
+     * @ORM\JoinColumn(name="passenger_aircraft_id", referencedColumnName="id")
+     */
+    protected $aircraft;
 
     /**
      * PassengerAirliners constructor.
@@ -111,5 +128,37 @@ class PassengerAirliners extends AbstractAircraft
     public function setAisle(int $aisle): void
     {
         $this->aisle = $aisle;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param int $id
+     */
+    public function setId(int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAircraft()
+    {
+        return $this->aircraft;
+    }
+
+    /**
+     * @param mixed $aircraft
+     */
+    public function setAircraft($aircraft): void
+    {
+        $this->aircraft = $aircraft;
     }
 }

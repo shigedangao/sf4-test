@@ -43,6 +43,14 @@ class CargoAirliner extends AbstractAircraft
     protected $container;
 
     /**
+     * @var
+     *
+     * @ORM\ManyToOne(targetEntity="BaseAircraft")
+     * @ORM\JoinColumn(name="cargo_aircraft_id", referencedColumnName="id")
+     */
+    protected $aircraft;
+
+    /**
      * CargoAirliner constructor.
      *
      * @param float $cargo
@@ -111,5 +119,21 @@ class CargoAirliner extends AbstractAircraft
     public function setContainer(float $container): void
     {
         $this->container = $container;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAircraft()
+    {
+        return $this->aircraft;
+    }
+
+    /**
+     * @param mixed $aircraft
+     */
+    public function setAircraft($aircraft): void
+    {
+        $this->aircraft = $aircraft;
     }
 }

@@ -35,6 +35,14 @@ class PersonalAircraft extends AbstractAircraft
     protected $base;
 
     /**
+     * @var
+     *
+     * @ORM\ManyToOne(targetEntity="BaseAircraft")
+     * @ORM\JoinColumn(name="personal_aircraft_id", referencedColumnName="id")
+     */
+    protected $aircraft;
+
+    /**
      * PersonalAircraft constructor.
      *
      * @param int $passenger
@@ -84,5 +92,21 @@ class PersonalAircraft extends AbstractAircraft
     public function setBase(string $base): void
     {
         $this->base = $base;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAircraft()
+    {
+        return $this->aircraft;
+    }
+
+    /**
+     * @param mixed $aircraft
+     */
+    public function setAircraft($aircraft): void
+    {
+        $this->aircraft = $aircraft;
     }
 }

@@ -49,6 +49,14 @@ class MilitaryAirliner extends AbstractAircraft
     protected $type;
 
     /**
+     * @var
+     *
+     * @ORM\ManyToOne(targetEntity="BaseAircraft")
+     * @ORM\JoinColumn(name="military_aircraft_id", referencedColumnName="id")
+     */
+    protected $aircraft;
+
+    /**
      * MilitaryAirliner constructor.
      *
      * @param string $base
@@ -136,5 +144,21 @@ class MilitaryAirliner extends AbstractAircraft
     public function setType(string $type): void
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAircraft()
+    {
+        return $this->aircraft;
+    }
+
+    /**
+     * @param mixed $aircraft
+     */
+    public function setAircraft($aircraft): void
+    {
+        $this->aircraft = $aircraft;
     }
 }
