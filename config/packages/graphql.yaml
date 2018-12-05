@@ -1,0 +1,31 @@
+overblog_graphql:
+    definitions:
+      use_classloader_listener: true
+      auto_compile: true
+      # cache
+      cache_dir: "%kernel.project_dir%/var/graphql"
+      # namespace
+      class_namespace: "Overblog\\GraphQLBundle\\__DEFINITIONS__"
+      schema:
+            query: AirplaneQuery
+            resolver_maps:
+              - App\GraphQL\Resolver\BaseResolverMap
+      mappings:
+            # auto_discover: false
+            types:
+                -
+                    type: graphql
+                    dir: "%kernel.project_dir%/config/graphql/types"
+                    suffix: ~
+                -
+                    type: graphql
+                    dir: "%kernel.project_dir%/config/graphql/enum"
+                    suffix: ~
+                -
+                    type: graphql
+                    dir: "%kernel.project_dir%/config/graphql/query"
+                    suffix: ~
+                -
+                    type: graphql
+                    dir: "%kernel.project_dir%/config/graphql/mutation"
+                    suffix: ~

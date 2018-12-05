@@ -1,0 +1,11 @@
+enum Manufacturer {
+    Airbus
+    Atr
+    Boeing
+    Bombardier
+    Comac
+    Embraer
+    Kawazaki
+    Let
+    Mitsubishi
+}

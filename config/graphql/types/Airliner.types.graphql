@@ -1,0 +1,9 @@
+type Airliner {
+    id: Int!
+    type: Int!
+    cargo: Float!
+    distance: Float!
+    passenger: Int!
+    type: Route
+    airplane: Airplane
+}
