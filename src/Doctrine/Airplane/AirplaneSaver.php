@@ -6,7 +6,7 @@
  * Time: 18:13
  */
 
-namespace App\Doctrine;
+namespace App\Doctrine\Airplane;
 
 
 use App\Common\Saver\SaverInterface;
@@ -14,7 +14,7 @@ use App\Entity\BaseAircraft;
 use App\Validator\Aircraft\AircraftModel;
 use Doctrine\ORM\EntityManagerInterface;
 
-class AirlinerSaver implements SaverInterface
+class AirplaneSaver implements SaverInterface
 {
 
     /**
@@ -28,7 +28,7 @@ class AirlinerSaver implements SaverInterface
     protected $em;
 
     /**
-     * AirlinerSaver constructor.
+     * AirplaneSaver constructor.
      *
      * @param EntityManagerInterface $em
      */

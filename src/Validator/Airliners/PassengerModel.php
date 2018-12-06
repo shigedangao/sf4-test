@@ -8,13 +8,14 @@
 
 namespace App\Validator\Airliners;
 
+use App\Validator\AbstractAircraftModel;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * Class PassengerModel
  * @package App\Validator\PassengerAirliners
  */
-class PassengerModel
+class PassengerModel extends AbstractAircraftModel
 {
     /**
      * @var float
@@ -27,25 +28,24 @@ class PassengerModel
      * @var integer
      *
      * @Assert\NotNull
-     * @Assert\GreaterThan(80)
-     */
-    public $passenger;
-
-    /**
-     * @var float
-     *
-     * @Assert\NotNull
-     */
-    public $cargo;
-
-    /**
-     * @var integer
-     *
-     * @Assert\NotNull
      * @Assert\Range(
      *     min = 1,
      *     max = 2
      * )
      */
     public $aisle;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     */
+    public $reg;
+
+    /**
+     * @var \App\Entity\BaseAircraft
+     *
+     * @Assert\NotNull()
+     */
+    public $aircraft;
 }

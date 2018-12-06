@@ -6,16 +6,16 @@
  * Time: 14:55
  */
 
-namespace App\Doctrine;
+namespace App\Doctrine\Airplane;
 
 use App\Common\Remover\RemoverInterface;
 use Doctrine\ORM\EntityManagerInterface;
 
 /**
- * Class AirlinerRemover
+ * Class AirplaneRemover
  * @package App\Doctrine
  */
-class AirlinerRemover implements RemoverInterface
+class AirplaneRemover implements RemoverInterface
 {
 
     /**
@@ -24,7 +24,7 @@ class AirlinerRemover implements RemoverInterface
     protected $em;
 
     /**
-     * AirlinerRemover constructor.
+     * AirplaneRemover constructor.
      *
      * @param EntityManagerInterface $em
      */

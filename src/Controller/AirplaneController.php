@@ -15,9 +15,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use App\Common\Errors\ErrorInterface;
-use App\Doctrine\AirlinerSaver;
-use App\Doctrine\AirlinerRemover;
-use App\Serializer\AirplaneSerializer;
+use App\Doctrine\Airplane\AirplaneSaver;
+use App\Doctrine\Airplane\AirplaneRemover;
+use App\Serializer\GenericNormalizer;
 use App\Repository\AirplaneRepository;
 
 /**
@@ -49,16 +49,16 @@ class AirplaneController extends AbstractController
     /**
      * AirplaneController constructor.
      *
-     * @param AirlinerSaver $saver
-     * @param AirlinerRemover $remover
+     * @param AirplaneSaver $saver
+     * @param AirplaneRemover $remover
      * @param AirplaneRepository $repo
-     * @param AirplaneSerializer $serializer
+     * @param GenericNormalizer $serializer
      */
     public function __construct(
-        AirlinerSaver $saver,
-        AirlinerRemover $remover,
+        AirplaneSaver $saver,
+        AirplaneRemover $remover,
         AirplaneRepository $repo,
-        AirplaneSerializer $serializer
+        GenericNormalizer $serializer
     ){
         $this->saver = $saver;
         $this->remover = $remover;
@@ -74,7 +74,7 @@ class AirplaneController extends AbstractController
      */
     public function indexAction() {
         $planes = $this->repo->findAllOrderByCode();
-        $response = $this->serializer->serializeArray($planes);
+        $response = $this->serializer->normalizeArray($planes);
 
         return new JsonResponse([
             'data' => $response
@@ -95,7 +95,7 @@ class AirplaneController extends AbstractController
         }
 
         $plane = $this->repo->findOneByCode($code);
-        $content = $this->serializer->serializeObject($plane);
+        $content = $this->serializer->normalizeObject($plane);
 
         return new JsonResponse([
             'data' => $content

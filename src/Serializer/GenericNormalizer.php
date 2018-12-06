@@ -13,10 +13,10 @@ use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 /**
- * Class AirplaneSerializer
+ * Class GenericNormalizer
  * @package App\Serializer
  */
-class AirplaneSerializer
+class GenericNormalizer
 {
     /**
      * @var $encoders
@@ -34,7 +34,7 @@ class AirplaneSerializer
     protected $serializer;
 
     /**
-     * AirplaneSerializer constructor.
+     * GenericNormalizer constructor.
      */
     public function __construct()
     {
@@ -48,12 +48,12 @@ class AirplaneSerializer
 
 
     /**
-     * Serialize Object
+     * Normalize Object
      *
      * @param $object
      * @return string|NULL
      */
-    public function serializeObject($object) {
+    public function normalizeObject($object) {
         if (!isset($object)) {
             return NULL;
         }
@@ -69,7 +69,7 @@ class AirplaneSerializer
      * @param array $arr
      * @return array
      */
-    public function serializeArray($arr = []): array {
+    public function normalizeArray($arr = []): array {
         $len = count($arr);
         $jsonArray = array();
 

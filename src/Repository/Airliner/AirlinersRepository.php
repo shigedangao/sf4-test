@@ -6,10 +6,10 @@
  * Time: 18:17
  */
 
-namespace App\Repository;
+namespace App\Repository\Airliner;
 
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\PassengerAirliners;
+use App\Entity\Passenger\PassengerAirliners;
 
 /**
  * Class AirlinersRepository
@@ -37,10 +37,8 @@ class AirlinersRepository
      *
      * @return array
      */
-    public function findAllOrderedByName(): array {
-        return $this->repository->findBy([], [
-            'name' => 'ASC'
-        ]);
+    public function findAll(): array {
+        return $this->repository->findAll();
     }
 
     /**

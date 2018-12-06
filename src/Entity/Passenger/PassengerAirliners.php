@@ -6,8 +6,10 @@
  * Time: 18:15
  */
 
-namespace App\Entity;
+namespace App\Entity\Passenger;
 
+use App\Entity\AbstractAircraft;
+use App\Validator\Airliners\PassengerModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -49,37 +51,39 @@ class PassengerAirliners extends AbstractAircraft
     protected $aisle;
 
     /**
-     * @var
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="BaseAircraft")
-     * @ORM\JoinColumn(name="passenger_aircraft_id", referencedColumnName="id")
+     * @ORM\Column(name="reg", type="string", length=255)
+     */
+    protected $reg;
+
+
+    /**
+     * @var integer
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\BaseAircraft")
+     * @ORM\JoinColumn(name="base_aircraft_id", referencedColumnName="id")
      */
     protected $aircraft;
 
     /**
      * PassengerAirliners constructor.
      *
-     * @param float $thrust
-     * @param float $cargo
-     * @param int $passenger
-     * @param string $owner
-     * @param int $aisle
+     * @param $model \App\Validator\Airliners\PassengerModel
      */
     public function __construct(
-        float $thrust,
-        float $cargo,
-        int $passenger,
-        string $owner,
-        int $aisle
+        PassengerModel $model
     ) {
         parent::__construct(
-            $passenger,
-            $owner
+            $model->passenger,
+            $model->owner
         );
 
-        $this->thrust = $thrust;
-        $this->cargo = $cargo;
-        $this->aisle = $aisle;
+        $this->thrust = $model->thrust;
+        $this->cargo = $model->cargo;
+        $this->aisle = $model->aisle;
+        $this->reg = $model->reg;
+        $this->aircraft = $model->aircraft;
     }
 
     /**
@@ -160,5 +164,21 @@ class PassengerAirliners extends AbstractAircraft
     public function setAircraft($aircraft): void
     {
         $this->aircraft = $aircraft;
+    }
+
+    /**
+     * @return string
+     */
+    public function getReg(): string
+    {
+        return $this->reg;
+    }
+
+    /**
+     * @param string $reg
+     */
+    public function setReg(string $reg): void
+    {
+        $this->reg = $reg;
     }
 }
