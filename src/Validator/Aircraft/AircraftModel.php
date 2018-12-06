@@ -6,15 +6,15 @@
  * Time: 18:19
  */
 
-namespace App\Validator;
+namespace App\Validator\Aircraft;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class BaseAircraftModel
+ * Class AircraftModel
  * @package App\Validator
  */
-class BaseAircraftModel
+class AircraftModel
 {
     /**
      * @var string
@@ -66,4 +66,11 @@ class BaseAircraftModel
      * @Assert\NotBlank()
      */
     public $manufacturer;
+
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank()
+     */
+    public $code;
 }

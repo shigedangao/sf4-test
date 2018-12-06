@@ -8,6 +8,7 @@
 
 namespace App\Entity;
 
+use App\Validator\Airliners\CargoModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -53,24 +54,18 @@ class CargoAirliner extends AbstractAircraft
     /**
      * CargoAirliner constructor.
      *
-     * @param float $cargo
-     * @param string $container
-     * @param string $passenger
-     * @param int $owner
+     * @param \App\Validator\Airliners\CargoModel $model
      */
     public function __construct(
-        float $cargo,
-        string $container,
-        string $passenger,
-        int $owner
+        CargoModel $model
     ) {
         parent::__construct(
-            $passenger,
-            $owner
+            $model->passenger,
+            $model->owner
         );
 
-        $this->payload = $cargo;
-        $this->container = $container;
+        $this->payload = $model->cargo;
+        $this->container = $model->owner;
     }
 
     /**

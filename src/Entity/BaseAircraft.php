@@ -9,6 +9,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use App\Validator\Aircraft\AircraftModel;
 
 /**
  * Class AbstractAircraft
@@ -71,30 +72,25 @@ class BaseAircraft
     private $manufacturer;
 
     /**
-     * AbstractAircraft constructor
+     * @var string
      *
-     *
-     * @param int $engines
-     * @param int $distance
-     * @param string $reg
-     * @param string $type
-     * @param string $name
-     * @param string $manufacturer
+     * @ORM\Column(name="code", type="string", length=255)
      */
-    public function __construct(
-        int $engines,
-        int $distance,
-        string $reg,
-        string $type,
-        string $name,
-        string $manufacturer
-    ){
-        $this->engines  = $engines;
-        $this->distance = $distance;
-        $this->reg      = $reg;
-        $this->type     = $type;
-        $this->name     = $name;
-        $this->manufacturer = $manufacturer;
+    private $code;
+
+    /**
+     * BaseAircraft constructor.
+     *
+     * @param \App\Validator\Aircraft\AircraftModel $model
+     */
+    public function __construct(AircraftModel $model)
+    {
+        $this->name = $model->name;
+        $this->engines = $model->engines;
+        $this->distance = $model->distance;
+        $this->reg = $model->reg;
+        $this->manufacturer = $model->manufacturer;
+        $this->code = $model->code;
     }
 
     /**
@@ -208,4 +204,21 @@ class BaseAircraft
     {
         $this->distance = $distance;
     }
+
+    /**
+     * @return string
+     */
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    /**
+     * @param string $code
+     */
+    public function setCode(string $code): void
+    {
+        $this->code = $code;
+    }
+
 }

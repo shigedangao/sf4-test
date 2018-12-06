@@ -8,6 +8,8 @@
 
 namespace App\Controller;
 
+use App\Form\Airplane\AirplaneFormType;
+use App\Validator\Aircraft\AircraftModel;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
@@ -15,16 +17,14 @@ use Symfony\Component\HttpFoundation\Request;
 use App\Common\Errors\ErrorInterface;
 use App\Doctrine\AirlinerSaver;
 use App\Doctrine\AirlinerRemover;
-use App\Repository\AirlinersRepository;
 use App\Serializer\AirplaneSerializer;
-use App\Validator\Airliners\AirlinersModel;
-use App\Form\Airliners\AirlinersFormType;
+use App\Repository\AirplaneRepository;
 
 /**
- * Class AircraftController
+ * Class AirplaneController
  * @package App\Controller
  */
-class AircraftController extends AbstractController
+class AirplaneController extends AbstractController
 {
     /**
      * @var
@@ -47,17 +47,17 @@ class AircraftController extends AbstractController
     protected $serializer;
 
     /**
-     * AircraftController constructor.
+     * AirplaneController constructor.
      *
      * @param AirlinerSaver $saver
      * @param AirlinerRemover $remover
-     * @param AirlinersRepository $repo
+     * @param AirplaneRepository $repo
      * @param AirplaneSerializer $serializer
      */
     public function __construct(
         AirlinerSaver $saver,
         AirlinerRemover $remover,
-        AirlinersRepository $repo,
+        AirplaneRepository $repo,
         AirplaneSerializer $serializer
     ){
         $this->saver = $saver;
@@ -68,12 +68,12 @@ class AircraftController extends AbstractController
 
 
     /**
-     * @Route("/aircraft/", name="aircraft", methods={"GET"})
+     * @Route("/airplane/", name="aircraft", methods={"GET"})
      *
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function indexAction() {
-        $planes = $this->repo->findAllOrderedByName();
+        $planes = $this->repo->findAllOrderByCode();
         $response = $this->serializer->serializeArray($planes);
 
         return new JsonResponse([
@@ -82,19 +82,19 @@ class AircraftController extends AbstractController
     }
 
     /**
-     * @Route("/aircraft/{reg}", name="get_aircraft_by_id", methods={"GET"})
+     * @Route("/airplane/{code}", name="get_aircraft_by_id", methods={"GET"})
      *
-     * @param string $reg
+     * @param string $code
      * @return JsonResponse
      */
-    public function getAirplaneByRegAction(string $reg) {
-        if (!isset($reg)) {
+    public function getAircraftByCode(string $code) {
+        if (!isset($code)) {
             return new JsonResponse([
                 'error' => ErrorInterface::INVALID_SLUG
             ]);
         }
 
-        $plane = $this->repo->findByReg($reg);
+        $plane = $this->repo->findOneByCode($code);
         $content = $this->serializer->serializeObject($plane);
 
         return new JsonResponse([
@@ -103,30 +103,29 @@ class AircraftController extends AbstractController
     }
 
     /**
-     * @Route("/aircraft/add", name="add_aircraft", methods={"POST"})
+     * @Route("/airplane/add", name="add_aircraft", methods={"POST"})
      *
      * @param Request $req
      * @return \Symfony\Component\HttpFoundation\JsonResponse
      */
     public function addAction(Request $req) {
         // Create an instance of the model
-        $airlinersModel = new AirlinersModel();
+        $aircraftModel = new AircraftModel();
 
-        $form = $this->createForm(AirlinersFormType::class, $airlinersModel);
+        $form = $this->createForm(AirplaneFormType::class, $aircraftModel);
         $data = json_decode($req->getContent(), true);
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $current = $this->repo->findByReg($airlinersModel->reg);
-            $size = count($current);
+            $object = $this->repo->findOneByCode($aircraftModel->reg);
 
-            if ($size) {
+            if (isset($object)) {
                 return new JsonResponse([
                     'error' => ErrorInterface::PRESENT_ERR
                 ]);
             }
 
-            $this->saver->create($airlinersModel);
+            $this->saver->create($aircraftModel);
             $err = $this->saver->save();
             if (isset($err)) {
                 return new JsonResponse([
@@ -145,20 +144,20 @@ class AircraftController extends AbstractController
     }
 
     /**
-     * @Route("/aircraft/update/{reg}", name="update_aircraft", methods={"PUT"})
+     * @Route("/airplane/update/{code}", name="update_aircraft", methods={"PUT"})
      *
      * @param Request $req
-     * @param string $reg
+     * @param string $code
      * @return JsonResponse
      */
-    public function updateAction(Request $req, string $reg) {
-        if (!isset($reg)) {
+    public function updateAction(Request $req, string $code) {
+        if (!isset($code)) {
             return new JsonResponse([
                 'error' => ErrorInterface::NOT_FOUND_ERR
             ]);
         }
 
-        $planeInDb = $this->repo->findByReg($reg);
+        $planeInDb = $this->repo->findOneByCode($code);
         if (!isset($planeInDb)) {
             return new JsonResponse([
                 'error' => ErrorInterface::ENTITY_NOT_FOUND_ERR
@@ -166,10 +165,10 @@ class AircraftController extends AbstractController
         }
 
         // Create a new model
-        $airliners = new AirlinersModel();
+        $airliners = new AircraftModel();
 
         // Form handler
-        $form = $this->createForm(AirlinersFormType::class, $airliners);
+        $form = $this->createForm(AirplaneFormType::class, $airliners);
         $data = json_decode($req->getContent(), true);
         $form->submit($data);
 
@@ -188,19 +187,19 @@ class AircraftController extends AbstractController
     }
 
     /**
-     * @Route("/aircraft/{reg}", name="delete_aircraft", methods={"DELETE"})
+     * @Route("/airplane/{code}", name="delete_aircraft", methods={"DELETE"})
      *
-     * @param string $reg
+     * @param string $code
      * @return JsonResponse
      */
-    public function deleteAction(string $reg) {
-        if (!isset($reg)) {
+    public function deleteAction(string $code) {
+        if (!isset($code)) {
             return new JsonResponse([
                 'error' => ErrorInterface::NOT_FOUND_ERR
             ]);
         }
 
-        $plane = $this->repo->findByReg($reg);
+        $plane = $this->repo->findOneByCode($code);
         if (isset($plane)) {
             $this->remover->delete($plane);
 
@@ -213,5 +212,4 @@ class AircraftController extends AbstractController
             'error' => ErrorInterface::ENTITY_NOT_FOUND_ERR
         ]);
     }
-
 }
