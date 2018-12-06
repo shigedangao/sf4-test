@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: marcintha
- * Date: 03/12/2018
- * Time: 18:14
+ * Date: 05/12/2018
+ * Time: 11:01
  */
 
 namespace App\Entity;
@@ -11,201 +11,71 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class AbstractAircraft
+ * Class AbstractAircraftModel
+ *
  * @package App\Entity
- *
  * @ORM\MappedSuperclass
- *
  */
 abstract class AbstractAircraft
 {
+
     /**
-     * @var integer
+     * @var int
      *
-     * @ORM\Column(name="id", type="integer")
-     * @ORM\Id
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="passenger", type="string", length=255)
      */
-    protected $id;
+    protected $passenger;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255)
+     * @ORM\Column(name="owner", type="string", length=255)
      */
-    protected $name;
+    protected $owner;
 
     /**
-     * @var integer
+     * AbstractAircraftModel constructor.
      *
-     * @ORM\Column(name="engines", type="integer")
-     */
-    protected $engines;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="distance", type="integer")
-     */
-    protected $distance;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="reg", type="string", length=255)
-     */
-    private $reg;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="type", type="string", length=255)
-     */
-    private $type;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="manufacturer", type="string", length=255)
-     */
-    private $manufacturer;
-
-    /**
-     * AbstractAircraft constructor
-     *
-     *
-     * @param int $engines
-     * @param int $distance
-     * @param string $reg
-     * @param string $type
-     * @param string $name
-     * @param string $manufacturer
+     * @param int $passenger
+     * @param string $owner
      */
     public function __construct(
-        int $engines,
-        int $distance,
-        string $reg,
-        string $type,
-        string $name,
-        string $manufacturer
-    ){
-        $this->engines  = $engines;
-        $this->distance = $distance;
-        $this->reg      = $reg;
-        $this->type     = $type;
-        $this->name     = $name;
-        $this->manufacturer = $manufacturer;
+        int $passenger,
+        string $owner
+    ) {
+        $this->passenger = $passenger;
+        $this->owner = $owner;
     }
 
     /**
      * @return int
      */
-    public function getId(): int
+    public function getPassenger(): int
     {
-        return $this->id;
+        return $this->passenger;
     }
 
     /**
-     * @param int $id
+     * @param int $passenger
      */
-    public function setId(int $id): void
+    public function setPassenger(int $passenger): void
     {
-        $this->id = $id;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    /**
-     * @param string $name
-     */
-    public function setName(string $name): void
-    {
-        $this->name = $name;
-    }
-
-    /**
-     * @return int
-     */
-    public function getEngines(): int
-    {
-        return $this->engines;
-    }
-
-    /**
-     * @param int $engines
-     */
-    public function setEngines(int $engines): void
-    {
-        $this->engines = $engines;
+        $this->passenger = $passenger;
     }
 
     /**
      * @return string
      */
-    public function getReg(): string
+    public function getOwner(): string
     {
-        return $this->reg;
+        return $this->owner;
     }
 
     /**
-     * @param string $reg
+     * @param string $owner
      */
-    public function setReg(string $reg): void
+    public function setOwner(string $owner): void
     {
-        $this->reg = $reg;
-    }
-
-    /**
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @param string $type
-     */
-    public function setType(string $type): void
-    {
-        $this->type = $type;
-    }
-
-    /**
-     * @return string
-     */
-    public function getManufacturer(): string
-    {
-        return $this->manufacturer;
-    }
-
-    /**
-     * @param string $manufacturer
-     */
-    public function setManufacturer(string $manufacturer): void
-    {
-        $this->manufacturer = $manufacturer;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDistance(): int
-    {
-        return $this->distance;
-    }
-
-    /**
-     * @param int $distance
-     */
-    public function setDistance(int $distance): void
-    {
-        $this->distance = $distance;
+        $this->owner = $owner;
     }
 }

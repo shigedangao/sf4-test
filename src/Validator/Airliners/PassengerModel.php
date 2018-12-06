@@ -11,10 +11,10 @@ namespace App\Validator\Airliners;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class AirlinersModel
- * @package App\Validator\Airliners
+ * Class PassengerModel
+ * @package App\Validator\PassengerAirliners
  */
-class AirlinersModel
+class PassengerModel
 {
     /**
      * @var float

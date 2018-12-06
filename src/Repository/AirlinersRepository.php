@@ -9,7 +9,7 @@
 namespace App\Repository;
 
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\Airliners;
+use App\Entity\PassengerAirliners;
 
 /**
  * Class AirlinersRepository
@@ -29,7 +29,7 @@ class AirlinersRepository
      */
     public function __construct(EntityManagerInterface $entityManager)
     {
-        $this->repository = $entityManager->getRepository(Airliners::class);
+        $this->repository = $entityManager->getRepository(PassengerAirliners::class);
     }
 
     /**
