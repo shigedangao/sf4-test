@@ -117,7 +117,7 @@ class AirplaneController extends AbstractController
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $object = $this->repo->findOneByCode($aircraftModel->reg);
+            $object = $this->repo->findOneByCode($aircraftModel->code);
 
             if (isset($object)) {
                 return new JsonResponse([

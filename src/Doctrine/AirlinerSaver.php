@@ -10,14 +10,15 @@ namespace App\Doctrine;
 
 
 use App\Common\Saver\SaverInterface;
+use App\Entity\BaseAircraft;
+use App\Validator\Aircraft\AircraftModel;
 use Doctrine\ORM\EntityManagerInterface;
-use App\Entity\PassengerAirliners;
 
 class AirlinerSaver implements SaverInterface
 {
 
     /**
-     * @var
+     * @var \App\Entity\BaseAircraft
      */
     protected $airliners;
 
@@ -52,24 +53,11 @@ class AirlinerSaver implements SaverInterface
     /**
      * Create the entity based on the Model
      *
-     * @param $object
-     * @return PassengerAirliners $object
+     * @param $object AircraftModel
      */
     public function create($object)
     {
-        $this->airliners = new PassengerAirliners(
-            $object->engines,
-            $object->distance,
-            $object->reg,
-            $object->type,
-            $object->name,
-            $object->manufacturer
-        );
-
-        $this->airliners->setCargo($object->cargo);
-        $this->airliners->setPassenger($object->passenger);
-        $this->airliners->setAisle($object->aisle);
-        $this->airliners->setThrust($object->thrust);
+        $this->airliners = new BaseAircraft($object);
     }
 
     /**
@@ -77,11 +65,12 @@ class AirlinerSaver implements SaverInterface
      *
      * @param $dbObject
      */
-    public function update(PassengerAirliners $dbObject) {
-        $dbObject->setPassenger($this->airliners->getPassenger());
-        $dbObject->setReg($this->airliners->getReg());
-        $dbObject->setAisle($this->airliners->getAisle());
+    public function update(BaseAircraft $dbObject) {
+        $dbObject->setCode($this->airliners->getCode());
         $dbObject->setEngines($this->airliners->getEngines());
+        $dbObject->setDistance($this->airliners->getDistance());
+        $dbObject->setManufacturer($this->airliners->getManufacturer());
+        $dbObject->setName($this->airliners->getName());
 
         $this->em->flush();
     }

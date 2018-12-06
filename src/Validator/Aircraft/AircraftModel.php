@@ -49,14 +49,6 @@ class AircraftModel
      * @var string
      *
      * @Assert\NotBlank()
-     * @Assert\Length(min="5")
-     */
-    public $reg;
-
-    /**
-     * @var string
-     *
-     * @Assert\NotBlank()
      */
     public $type;
 

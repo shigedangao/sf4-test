@@ -11,7 +11,7 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Class AbstractAircraft
+ * Class AbstractAircraftModel
  *
  * @package App\Entity
  * @ORM\MappedSuperclass
@@ -34,7 +34,7 @@ abstract class AbstractAircraft
     protected $owner;
 
     /**
-     * AbstractAircraft constructor.
+     * AbstractAircraftModel constructor.
      *
      * @param int $passenger
      * @param string $owner

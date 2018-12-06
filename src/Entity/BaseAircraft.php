@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 use App\Validator\Aircraft\AircraftModel;
 
 /**
- * Class AbstractAircraft
+ * Class AbstractAircraftModel
  * @package App\Entity
  *
  * @ORM\Entity
@@ -53,13 +53,6 @@ class BaseAircraft
     /**
      * @var string
      *
-     * @ORM\Column(name="reg", type="string", length=255)
-     */
-    private $reg;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="type", type="string", length=255)
      */
     private $type;
@@ -88,7 +81,7 @@ class BaseAircraft
         $this->name = $model->name;
         $this->engines = $model->engines;
         $this->distance = $model->distance;
-        $this->reg = $model->reg;
+        $this->type = $model->type;
         $this->manufacturer = $model->manufacturer;
         $this->code = $model->code;
     }
@@ -139,22 +132,6 @@ class BaseAircraft
     public function setEngines(int $engines): void
     {
         $this->engines = $engines;
-    }
-
-    /**
-     * @return string
-     */
-    public function getReg(): string
-    {
-        return $this->reg;
-    }
-
-    /**
-     * @param string $reg
-     */
-    public function setReg(string $reg): void
-    {
-        $this->reg = $reg;
     }
 
     /**
