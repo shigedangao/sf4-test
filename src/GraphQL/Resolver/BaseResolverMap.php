@@ -9,6 +9,8 @@
 namespace App\GraphQL\Resolver;
 
 
+
+use App\GraphQL\Resolver\Airliner\AirlinersResolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Overblog\GraphQLBundle\Definition\Argument;
@@ -20,9 +22,13 @@ use Overblog\GraphQLBundle\Definition\Argument;
 class BaseResolverMap extends ResolverMap
 {
 
+    /**
+     * @var \App\GraphQL\Resolver\AirlinersResolver
+     */
     protected $airliner;
 
-    public function __construct(Airliners $airliner)
+
+    public function __construct(AirlinersResolver $airliner)
     {
         $this->airliner = $airliner;
     }

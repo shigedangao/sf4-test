@@ -15,7 +15,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Class AirlinerRemover
  *
- * @package App\Doctrine\Airliner
+ * @package App\Doctrine\AirlinerResolver
  */
 class AirlinerRemover implements RemoverInterface
 {

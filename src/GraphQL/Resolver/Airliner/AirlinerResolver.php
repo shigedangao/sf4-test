@@ -6,17 +6,17 @@
  * Time: 23:32
  */
 
-namespace App\GraphQL\Resolver;
+namespace App\GraphQL\Resolver\Airliner;
 
 use App\Repository\Airliner\AirlinersRepository;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class Airliner
+ * Class AirlinerResolver
  * @package App\Resolvers
  */
-class Airliner implements ResolverInterface, AliasedInterface
+class AirlinerResolver implements ResolverInterface, AliasedInterface
 {
 
     /**
@@ -25,8 +25,9 @@ class Airliner implements ResolverInterface, AliasedInterface
     protected $repository;
 
     /**
-     * Airliner constructor.
-     * @param Airliner $airlinersRepository
+     * AirlinerResolver constructor.
+     *
+     * @param AirlinerResolver $airlinersRepository
      */
     public function __construct(AirlinersRepository $airlinersRepository) {
         $this->repository = $airlinersRepository;
@@ -46,7 +47,7 @@ class Airliner implements ResolverInterface, AliasedInterface
     public static function getAliases(): array
     {
         return [
-            'resolve' => 'Airliner'
+            'resolve' => 'AirlinerResolver'
         ];
     }
 

@@ -1,5 +1,5 @@
 type AirplaneQuery {
-    # Airliner #
+    # AirlinerResolver #
     airliner(reg: String!): Airliner
     airliners: [Airliner]
 }

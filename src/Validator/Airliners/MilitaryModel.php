@@ -13,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * Class MilitaryModel
  *
- * @package App\Validator\Airliners
+ * @package App\Validator\AirlinersResolver
  */
 class MilitaryModel
 {

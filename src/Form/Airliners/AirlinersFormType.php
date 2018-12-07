@@ -18,7 +18,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 /**
  * Class AirlinersFormType
  *
- * @package App\Form\Airliners
+ * @package App\Form\AirlinersResolver
  */
 class AirlinersFormType extends AbstractFormType
 {
