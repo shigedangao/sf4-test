@@ -8,29 +8,27 @@
 
 namespace App\GraphQL\Resolver;
 
-
-
 use App\GraphQL\Resolver\Airliner\AirlinersResolver;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Overblog\GraphQLBundle\Definition\Argument;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * Class BaseResolverMap
  * @package App\GraphQL\Resolver
  */
-class BaseResolverMap extends ResolverMap
+class BaseResolverMap extends AbstractResolver
 {
 
     /**
-     * @var \App\GraphQL\Resolver\AirlinersResolver
+     * BaseResolverMap constructor.
+     *
+     * @param \Symfony\Component\DependencyInjection\ContainerInterface $container
      */
-    protected $airliner;
-
-
-    public function __construct(AirlinersResolver $airliner)
+    public function __construct(ContainerInterface $container)
     {
-        $this->airliner = $airliner;
+        parent::__construct($container);
     }
 
     /**
@@ -42,16 +40,18 @@ class BaseResolverMap extends ResolverMap
             'AirplaneQuery' => [
                 self::RESOLVE_FIELD => function($value, Argument $args, \ArrayObject $ctx, ResolveInfo $info) {
                     $fieldName = $info->fieldName;
-
                     if (!isset($fieldName)) {
                         return NULL;
                     }
 
-                    if ($fieldName == "airliners") {
+
+                   /** if ($fieldName == "airliners") {
                         return $this->airliner->resolve();
                     }
 
-                    return 'Lol';
+                    return 'Lol';**/
+                   $resolver = parent::getContainerByName("lol");
+                   return $resolver->resolve();
                 }
             ]
         ];
