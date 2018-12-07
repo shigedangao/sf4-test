@@ -9,6 +9,7 @@
 namespace App\Controller;
 
 use App\Common\Errors\ErrorInterface;
+use App\Doctrine\Airliner\AirlinerRemover;
 use App\Doctrine\Airliner\AirlinerSaver;
 use App\Form\Airliners\AirlinersFormType;
 use App\Repository\Airliner\AirlinersRepository;
@@ -38,6 +39,11 @@ class AirlinerController extends AbstractController
     protected $saver;
 
     /**
+     * @var \App\Doctrine\Airliner\AirlinerRemover
+     */
+    protected $remover;
+
+    /**
      * @var \App\Serializer\GenericNormalizer
      */
     protected $normalizer;
@@ -47,15 +53,18 @@ class AirlinerController extends AbstractController
      *
      * @param \App\Repository\Airliner\AirlinersRepository $airlinersRepository
      * @param \App\Doctrine\Airliner\AirlinerSaver $saver
+     * @param \App\Doctrine\Airliner\AirlinerRemover
      * @param \App\Serializer\GenericNormalizer $normalizer
      */
     public function __construct(
         AirlinersRepository $airlinersRepository,
         AirlinerSaver $saver,
+        AirlinerRemover $remover,
         GenericNormalizer $normalizer
     ){
         $this->repo = $airlinersRepository;
         $this->saver = $saver;
+        $this->remover = $remover;
         $this->normalizer = $normalizer;
     }
 
@@ -150,6 +159,33 @@ class AirlinerController extends AbstractController
 
         return new JsonResponse([
             'error' => ErrorInterface::ASSERT_ERR
+        ]);
+    }
+
+    /**
+     * @Route("/airliner/delete/{reg}", name="delete_airliner", methods={"DELETE"})
+     *
+     * @param string $reg
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function deleteAction(string $reg) {
+        if (!isset($reg)) {
+            return new JsonResponse([
+                'error' => ErrorInterface::NOT_FOUND_ERR
+            ]);
+        }
+
+        $airliner = $this->repo->findByReg($reg);
+        if (isset($airliner)) {
+            $this->remover->delete($airliner);
+
+            return new JsonResponse([
+                'data' => 'success'
+            ]);
+        }
+
+        return new JsonResponse([
+            'error' => ErrorInterface::ENTITY_NOT_FOUND_ERR
         ]);
     }
 }
