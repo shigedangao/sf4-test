@@ -30,4 +30,11 @@ abstract class AbstractAircraftModel
      * @Assert\NotBlank()
      */
     public $owner;
+
+    /**
+     * @var float
+     *
+     * @Assert\NotNull
+     */
+    public $cargo;
 }

@@ -8,7 +8,7 @@
 
 namespace App\GraphQL\Resolver;
 
-use App\Repository\AirlinersRepository;
+use App\Repository\Airliner\AirlinersRepository;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
@@ -26,7 +26,7 @@ class Airliner implements ResolverInterface, AliasedInterface
 
     /**
      * Airliner constructor.
-     * @param AirlinersRepository $airlinersRepository
+     * @param Airliner $airlinersRepository
      */
     public function __construct(AirlinersRepository $airlinersRepository) {
         $this->repository = $airlinersRepository;
