@@ -80,14 +80,14 @@ class AirlinerController extends AbstractController
      * @Route("/airliner/add", name="add_airliner", methods={"POST"})
      */
     public function addAction(Request $req) {
-        $airlinerModel = new PassengerModel();
+        $model = new PassengerModel();
 
-        $form = $this->createForm(AirlinersFormType::class, $airlinerModel);
+        $form = $this->createForm(AirlinersFormType::class, $model);
         $data = json_decode($req->getContent(), true);
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $currentModel = $this->repo->findByReg($airlinerModel->reg);
+            $currentModel = $this->repo->findByReg($model->reg);
 
             if (isset($currentModel)) {
                 return new JsonResponse([
@@ -95,7 +95,7 @@ class AirlinerController extends AbstractController
                 ]);
             }
 
-            $this->saver->create($airlinerModel);
+            $this->saver->create($model);
             $err = $this->saver->save();
 
             if (isset($err)) {
@@ -107,6 +107,49 @@ class AirlinerController extends AbstractController
 
         return new JsonResponse([
             'success' => 'insert'
+        ]);
+    }
+
+    /**
+     * @Route("/airliner/update/{reg}", name="update_airliner", methods={"PUT"})
+     *
+     * @param \Symfony\Component\HttpFoundation\Request $req
+     * @param string $reg
+     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     */
+    public function updateAction(Request $req, string $reg) {
+        if (!isset($reg)) {
+            return new JsonResponse([
+                'error' => ErrorInterface::NOT_FOUND_ERR
+            ]);
+        }
+
+        $airliner = $this->repo->findByReg($reg);
+        if (!isset($airliner)) {
+            return new JsonResponse([
+                'error' => ErrorInterface::ENTITY_NOT_FOUND_ERR
+            ]);
+        }
+
+        // create a new model
+        $model = new PassengerModel();
+
+        // form
+        $form = $this->createForm(AirlinersFormType::class, $model);
+        $data = json_decode($req->getContent(), true);
+        $form->submit($data);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->saver->create($model);
+            $this->saver->update($airliner);
+
+            return new JsonResponse([
+                'data' => 'success'
+            ]);
+        }
+
+        return new JsonResponse([
+            'error' => ErrorInterface::ASSERT_ERR
         ]);
     }
 }

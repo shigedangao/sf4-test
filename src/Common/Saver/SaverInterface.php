@@ -24,4 +24,10 @@ interface SaverInterface
      * @return mixed
      */
     public function create($object);
+
+    /**
+     * @param $object
+     * @return mixed
+     */
+    public function update($object);
 }

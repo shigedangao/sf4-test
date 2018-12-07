@@ -69,21 +69,17 @@ class PassengerAirliners extends AbstractAircraft
     /**
      * PassengerAirliners constructor.
      *
-     * @param $model \App\Validator\Airliners\PassengerModel
+     * @param int $passenger
+     * @param string $owner
      */
     public function __construct(
-        PassengerModel $model
+        int $passenger,
+        string $owner
     ) {
         parent::__construct(
-            $model->passenger,
-            $model->owner
+            $passenger,
+            $owner
         );
-
-        $this->thrust = $model->thrust;
-        $this->cargo = $model->cargo;
-        $this->aisle = $model->aisle;
-        $this->reg = $model->reg;
-        $this->aircraft = $model->aircraft;
     }
 
     /**

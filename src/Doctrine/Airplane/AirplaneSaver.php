@@ -11,16 +11,20 @@ namespace App\Doctrine\Airplane;
 
 use App\Common\Saver\SaverInterface;
 use App\Entity\BaseAircraft;
-use App\Validator\Aircraft\AircraftModel;
 use Doctrine\ORM\EntityManagerInterface;
 
+/**
+ * Class AirplaneSaver
+ *
+ * @package App\Doctrine\Airplane
+ */
 class AirplaneSaver implements SaverInterface
 {
 
     /**
      * @var \App\Entity\BaseAircraft
      */
-    protected $airliners;
+    protected $airplane;
 
     /**
      * @var EntityManagerInterface
@@ -43,7 +47,7 @@ class AirplaneSaver implements SaverInterface
     public function save()
     {
         try {
-            $this->em->persist($this->airliners);
+            $this->em->persist($this->airplane);
             $this->em->flush();
         } catch (\Exception $e) {
             return $e->getMessage();
@@ -53,24 +57,31 @@ class AirplaneSaver implements SaverInterface
     /**
      * Create the entity based on the Model
      *
-     * @param $object AircraftModel
+     * @param $model \App\Validator\Aircraft\AircraftModel
      */
-    public function create($object)
+    public function create($model)
     {
-        $this->airliners = new BaseAircraft($object);
+        $this->airplane = new BaseAircraft();
+        $this->airplane->setName($model->name);
+        $this->airplane->setEngines($model->engines);
+        $this->airplane->setDistance($model->distance);
+        $this->airplane->setType($model->type);
+        $this->airplane->setManufacturer($model->manufacturer);
+        $this->airplane->setCode($model->code);
+
     }
 
     /**
      * Hydrate the db object with the update object
      *
-     * @param $dbObject
+     * @param $dbObject \App\Entity\BaseAircraft
      */
-    public function update(BaseAircraft $dbObject) {
-        $dbObject->setCode($this->airliners->getCode());
-        $dbObject->setEngines($this->airliners->getEngines());
-        $dbObject->setDistance($this->airliners->getDistance());
-        $dbObject->setManufacturer($this->airliners->getManufacturer());
-        $dbObject->setName($this->airliners->getName());
+    public function update($dbObject) {
+        $dbObject->setCode($this->airplane->getCode());
+        $dbObject->setEngines($this->airplane->getEngines());
+        $dbObject->setDistance($this->airplane->getDistance());
+        $dbObject->setManufacturer($this->airplane->getManufacturer());
+        $dbObject->setName($this->airplane->getName());
 
         $this->em->flush();
     }

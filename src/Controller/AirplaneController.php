@@ -110,14 +110,14 @@ class AirplaneController extends AbstractController
      */
     public function addAction(Request $req) {
         // Create an instance of the model
-        $aircraftModel = new AircraftModel();
+        $model = new AircraftModel();
 
-        $form = $this->createForm(AirplaneFormType::class, $aircraftModel);
+        $form = $this->createForm(AirplaneFormType::class, $model);
         $data = json_decode($req->getContent(), true);
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $object = $this->repo->findOneByCode($aircraftModel->code);
+            $object = $this->repo->findOneByCode($model->code);
 
             if (isset($object)) {
                 return new JsonResponse([
@@ -125,7 +125,7 @@ class AirplaneController extends AbstractController
                 ]);
             }
 
-            $this->saver->create($aircraftModel);
+            $this->saver->create($model);
             $err = $this->saver->save();
             if (isset($err)) {
                 return new JsonResponse([
@@ -157,24 +157,24 @@ class AirplaneController extends AbstractController
             ]);
         }
 
-        $planeInDb = $this->repo->findOneByCode($code);
-        if (!isset($planeInDb)) {
+        $aircraft = $this->repo->findOneByCode($code);
+        if (!isset($aircraft)) {
             return new JsonResponse([
                 'error' => ErrorInterface::ENTITY_NOT_FOUND_ERR
             ]);
         }
 
         // Create a new model
-        $airliners = new AircraftModel();
+        $model = new AircraftModel();
 
         // Form handler
-        $form = $this->createForm(AirplaneFormType::class, $airliners);
+        $form = $this->createForm(AirplaneFormType::class, $model);
         $data = json_decode($req->getContent(), true);
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->saver->create($airliners);
-            $this->saver->update($planeInDb);
+            $this->saver->create($model);
+            $this->saver->update($aircraft);
 
             return new JsonResponse([
                 'data' => 'success'

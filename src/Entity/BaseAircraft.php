@@ -72,21 +72,6 @@ class BaseAircraft
     private $code;
 
     /**
-     * BaseAircraft constructor.
-     *
-     * @param \App\Validator\Aircraft\AircraftModel $model
-     */
-    public function __construct(AircraftModel $model)
-    {
-        $this->name = $model->name;
-        $this->engines = $model->engines;
-        $this->distance = $model->distance;
-        $this->type = $model->type;
-        $this->manufacturer = $model->manufacturer;
-        $this->code = $model->code;
-    }
-
-    /**
      * @return int
      */
     public function getId(): int
