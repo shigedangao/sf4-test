@@ -9,7 +9,6 @@
 namespace App\Entity\Passenger;
 
 use App\Entity\AbstractAircraft;
-use App\Validator\Airliners\PassengerModel;
 use Doctrine\ORM\Mapping as ORM;
 
 /**

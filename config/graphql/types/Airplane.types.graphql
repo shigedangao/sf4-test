@@ -1,8 +1,9 @@
 type Airplane {
     id: Int!
-    manufacturer: Airplane
     name: String!
-    engines: Float!
-    reg: String!
-    thrust: Float!
+    engines: Int!
+    distance: Int!
+    type: String!
+    code: String!
+    manufacturer: String!
 }

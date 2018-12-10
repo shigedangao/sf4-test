@@ -9,7 +9,6 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use App\Validator\Aircraft\AircraftModel;
 
 /**
  * Class AbstractAircraftModel
@@ -55,21 +54,21 @@ class BaseAircraft
      *
      * @ORM\Column(name="type", type="string", length=255)
      */
-    private $type;
+    protected $type;
 
     /**
      * @var string
      *
      * @ORM\Column(name="manufacturer", type="string", length=255)
      */
-    private $manufacturer;
+    protected $manufacturer;
 
     /**
      * @var string
      *
      * @ORM\Column(name="code", type="string", length=255)
      */
-    private $code;
+    protected $code;
 
     /**
      * @return int

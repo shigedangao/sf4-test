@@ -16,7 +16,7 @@ use Doctrine\ORM\EntityManagerInterface;
 /**
  * Class AirlinerSaver
  *
- * @package App\Doctrine\Airliner
+ * @package App\Doctrine\AirlinerResolver
  */
 class AirlinerSaver implements SaverInterface
 {
