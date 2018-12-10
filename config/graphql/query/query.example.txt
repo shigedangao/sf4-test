@@ -17,6 +17,20 @@
 
 ## Get single airliners
 
+{
+  airliner(reg: "B-1115") {
+    reg
+    thrust
+    aircraft {
+	  id
+      name
+      engines
+      distance
+      code
+      manufacturer
+    }
+  }
+}
 
 
 ## Get airplanes
