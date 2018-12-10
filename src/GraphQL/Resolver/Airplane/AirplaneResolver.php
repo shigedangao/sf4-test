@@ -9,7 +9,10 @@
 namespace App\GraphQL\Resolver\Airplane;
 
 
+use App\Common\GraphQL\BaseResolverInterface;
 use App\Repository\AirplaneRepository;
+use App\Utils\GraphQL\ArgsParser;
+use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
@@ -18,7 +21,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
  *
  * @package App\GraphQL\Resolver\Airplane
  */
-class AirplaneResolver implements ResolverInterface, AliasedInterface
+class AirplaneResolver implements ResolverInterface, AliasedInterface, BaseResolverInterface
 {
     /**
      * @var $repository \App\Repository\AirplaneRepository
@@ -36,10 +39,19 @@ class AirplaneResolver implements ResolverInterface, AliasedInterface
     }
 
     /**
-     * @return array
+     * @param \Overblog\GraphQLBundle\Definition\Argument $args
+     * @return \App\Entity\BaseAircraft|mixed|null|object
      */
-    public function resolve() {
-        return $this->repository->findAllOrderByCode();
+    public function resolve(Argument $args) {
+        $criteria = ArgsParser::parseArguments($args, [
+            'code'
+        ]);
+
+        if (isset($criteria)) {
+            return $this->repository->findOneByCode($criteria[0]);
+        }
+
+        return NULL;
     }
 
     /**

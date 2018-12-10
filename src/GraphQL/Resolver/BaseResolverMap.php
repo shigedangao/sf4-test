@@ -42,16 +42,15 @@ class BaseResolverMap extends AbstractResolver
                         return NULL;
                     }
 
-                   $resolver = parent::getContainerByName($fieldName);
-                   if (is_string($resolver)) {
+                    $resolver = parent::getContainerByName($fieldName);
+                    if (is_string($resolver)) {
                        // @TODO see how to handle errors with GraphQL
                        return NULL;
-                   }
+                    }
 
-                   return $resolver->resolve();
+                    return $resolver->resolve($args);
                 }
             ]
         ];
     }
-
 }

@@ -50,6 +50,8 @@ abstract class AbstractResolver extends ResolverMap
         if (!strcmp('s', $kind)) {
             $ns = mb_substr($name, 0, -1);
             $ns = ucfirst($ns);
+        } else {
+            $ns = ucfirst($ns);
         }
 
         $baseResolverName = ucfirst($name."Resolver");

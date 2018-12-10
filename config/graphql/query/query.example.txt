@@ -15,10 +15,27 @@
   }
 }
 
+## Get single airliners
+
+
+
 ## Get airplanes
 
 {
   airplanes {
+    id
+    name
+    engines
+    distance
+    code
+    manufacturer
+  }
+}
+
+## Get single airplane
+
+{
+  airplane(code: "788") {
     id
     name
     engines
