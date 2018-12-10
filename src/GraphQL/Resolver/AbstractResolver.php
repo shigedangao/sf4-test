@@ -9,7 +9,6 @@
 namespace App\GraphQL\Resolver;
 
 
-use App\GraphQL\Resolver\Airliner\AirlinersResolver;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -20,6 +19,11 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  */
 abstract class AbstractResolver extends ResolverMap
 {
+    /**
+     * @var string
+     */
+    private const BASE_RESOLVER_NAMESPACE = "App\GraphQL\Resolver\{folder}\{cls}";
+    
     /**
      * @var ContainerInterface
      */
@@ -37,15 +41,45 @@ abstract class AbstractResolver extends ResolverMap
 
     /**
      * @param string $name
-     * @return null
+     * @return string
+     */
+    private function getResolverNamespace(string $name) {
+        $ns = $name;
+        $kind = mb_substr($name, -1);
+        // Check if it's a plural schema and return the singular in order to get the folder
+        if (!strcmp('s', $kind)) {
+            $ns = mb_substr($name, 0, -1);
+            $ns = ucfirst($ns);
+        }
+
+        $baseResolverName = ucfirst($name."Resolver");
+        $namespace = self::BASE_RESOLVER_NAMESPACE;
+        $namespace = str_replace("{folder}", $ns, $namespace);
+        $namespace = str_replace("{cls}", $baseResolverName, $namespace);
+
+        return $namespace;
+    }
+
+    /**
+     * @param string $name
+     * @return null|object|string
      */
     public function getContainerByName(string $name) {
         if (!isset($name)) {
             return NULL;
         }
 
-        // @TODO pass name or maybe use a list that will return a resolver...
-        $resolver = $this->container->get(AirlinersResolver::class);
-        return $resolver;
+        $resolverName = $this->getResolverNamespace($name);
+        try {
+            $class = new \ReflectionClass($resolverName);
+            $resolver = $this->container->get($class->getName());
+            if (isset($resolver)) {
+                return $resolver;
+            }
+
+            throw new \Exception("Unable to find resolver");
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 }
