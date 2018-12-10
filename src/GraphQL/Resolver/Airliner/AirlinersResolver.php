@@ -8,7 +8,6 @@
 
 namespace App\GraphQL\Resolver\Airliner;
 
-
 use App\Repository\Airliner\AirlinersRepository;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
