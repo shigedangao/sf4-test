@@ -2,8 +2,8 @@
 /**
  * Created by PhpStorm.
  * User: marcintha
- * Date: 07/12/2018
- * Time: 14:05
+ * Date: 10/12/2018
+ * Time: 10:53
  */
 
 namespace App\GraphQL\Resolver\Airplane;
@@ -11,25 +11,25 @@ namespace App\GraphQL\Resolver\Airplane;
 
 use App\Common\GraphQL\BaseResolverInterface;
 use App\Repository\AirplaneRepository;
-use App\Utils\GraphQL\ArgsParser;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
 /**
- * Class AirplaneResolver
+ * Class AirplanesResolver
  *
  * @package App\GraphQL\Resolver\Airplane
  */
-class AirplaneResolver implements ResolverInterface, AliasedInterface, BaseResolverInterface
+class AirplanesResolver implements ResolverInterface, AliasedInterface, BaseResolverInterface
 {
-    /**
-     * @var $repository \App\Repository\AirplaneRepository
-     */
-    public $repository;
 
     /**
-     * AirplaneResolver constructor.
+     * @var \App\Repository\AirplaneRepository
+     */
+    protected $repository;
+
+    /**
+     * AirplanesResolver constructor.
      *
      * @param \App\Repository\AirplaneRepository $airplaneRepository
      */
@@ -40,18 +40,10 @@ class AirplaneResolver implements ResolverInterface, AliasedInterface, BaseResol
 
     /**
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
-     * @return \App\Entity\BaseAircraft|mixed|null|object
+     * @return array|mixed
      */
     public function resolve(Argument $args) {
-        $criteria = ArgsParser::parseArguments($args, [
-            'code'
-        ]);
-
-        if (isset($criteria)) {
-            return $this->repository->findOneByCode($criteria[0]);
-        }
-
-        return NULL;
+        return $this->repository->findAllOrderByCode();
     }
 
     /**
@@ -60,8 +52,7 @@ class AirplaneResolver implements ResolverInterface, AliasedInterface, BaseResol
     public static function getAliases()
     {
         return [
-            'resolve' => 'Airplane'
+            'resolve' => 'AirplanesResolver'
         ];
     }
-
 }

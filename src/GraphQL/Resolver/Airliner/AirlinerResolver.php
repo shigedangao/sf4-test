@@ -9,6 +9,8 @@
 namespace App\GraphQL\Resolver\Airliner;
 
 use App\Repository\Airliner\AirlinersRepository;
+use App\Utils\GraphQL\ArgsParser;
+use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\ResolverInterface;
 
@@ -27,18 +29,26 @@ class AirlinerResolver implements ResolverInterface, AliasedInterface
     /**
      * AirlinerResolver constructor.
      *
-     * @param AirlinerResolver $airlinersRepository
+     * @param $airlinersRepository AirlinersRepository
      */
     public function __construct(AirlinersRepository $airlinersRepository) {
         $this->repository = $airlinersRepository;
     }
 
     /**
-     * @param string $reg
-     * @return object
+     * @param \Overblog\GraphQLBundle\Definition\Argument $args
+     * @return null|object
      */
-    public function resolve(string $reg) {
-        return $this->repository->findByReg($reg);
+    public function resolve(Argument $args) {
+        $criteria = ArgsParser::parseArguments($args, [
+            'reg'
+        ]);
+
+        if (isset($criteria)) {
+            return $this->repository->findByReg($criteria[0]);
+        }
+
+        return NULL;
     }
 
     /**

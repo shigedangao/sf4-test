@@ -1,0 +1,61 @@
+## Get airliners
+
+{
+  airliners {
+    reg
+    thrust
+    aircraft {
+	  id
+      name
+      engines
+      distance
+      code
+      manufacturer
+    }
+  }
+}
+
+## Get single airliners
+
+{
+  airliner(reg: "B-1115") {
+    reg
+    thrust
+    aircraft {
+	  id
+      name
+      engines
+      distance
+      code
+      manufacturer
+    }
+  }
+}
+
+
+## Get airplanes
+
+{
+  airplanes {
+    id
+    name
+    engines
+    distance
+    code
+    manufacturer
+  }
+}
+
+## Get single airplane
+
+{
+  airplane(code: "788") {
+    id
+    name
+    engines
+    distance
+    code
+    manufacturer
+  }
+}
+

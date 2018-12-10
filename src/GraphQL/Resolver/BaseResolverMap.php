@@ -8,9 +8,7 @@
 
 namespace App\GraphQL\Resolver;
 
-use App\GraphQL\Resolver\Airliner\AirlinersResolver;
 use GraphQL\Type\Definition\ResolveInfo;
-use Overblog\GraphQLBundle\Resolver\ResolverMap;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -44,16 +42,15 @@ class BaseResolverMap extends AbstractResolver
                         return NULL;
                     }
 
-                   $resolver = parent::getContainerByName("airliners");
-                   if (is_string($resolver)) {
+                    $resolver = parent::getContainerByName($fieldName);
+                    if (is_string($resolver)) {
                        // @TODO see how to handle errors with GraphQL
                        return NULL;
-                   }
+                    }
 
-                   return $resolver->resolve();
+                    return $resolver->resolve($args);
                 }
             ]
         ];
     }
-
 }
