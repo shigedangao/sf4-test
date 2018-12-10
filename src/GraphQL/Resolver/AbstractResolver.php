@@ -71,8 +71,7 @@ abstract class AbstractResolver extends ResolverMap
 
         $resolverName = $this->getResolverNamespace($name);
         try {
-            $class = new \ReflectionClass($resolverName);
-            $resolver = $this->container->get($class->getName());
+            $resolver = $this->container->get($resolverName);
             if (isset($resolver)) {
                 return $resolver;
             }

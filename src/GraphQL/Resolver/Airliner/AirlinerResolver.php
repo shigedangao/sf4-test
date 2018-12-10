@@ -27,7 +27,7 @@ class AirlinerResolver implements ResolverInterface, AliasedInterface
     /**
      * AirlinerResolver constructor.
      *
-     * @param AirlinerResolver $airlinersRepository
+     * @param $airlinersRepository AirlinersRepository
      */
     public function __construct(AirlinersRepository $airlinersRepository) {
         $this->repository = $airlinersRepository;
