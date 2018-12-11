@@ -50,6 +50,11 @@ class BaseResolverMap extends AbstractResolver
 
                     return $resolver->resolve($args);
                 }
+            ],
+            'AirplaneMutation' => [
+               self::RESOLVE_FIELD => function($value, Argument $args, \ArrayObject $ctx, ResolveInfo $info) {
+
+               }
             ]
         ];
     }

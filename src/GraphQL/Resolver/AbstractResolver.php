@@ -46,7 +46,7 @@ abstract class AbstractResolver extends ResolverMap
     private function getResolverNamespace(string $name) {
         $ns = $name;
         $kind = mb_substr($name, -1);
-        // Check if it's a plural schema and return the singular in order to get the folder
+        // Check if it's a plural query and return the singular in order to get the folder
         if (!strcmp('s', $kind)) {
             $ns = mb_substr($name, 0, -1);
             $ns = ucfirst($ns);

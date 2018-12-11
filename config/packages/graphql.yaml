@@ -10,6 +10,7 @@ overblog_graphql:
             query: AirplaneQuery
             resolver_maps:
               - App\GraphQL\Resolver\BaseResolverMap
+            mutation: AirplaneMutation
       mappings:
             # auto_discover: false
             types:
@@ -28,4 +29,8 @@ overblog_graphql:
                 -
                     type: graphql
                     dir: "%kernel.project_dir%/config/graphql/mutation"
+                    suffix: ~
+                -
+                    type: graphql
+                    dir: "%kernel.project_dir%/config/graphql/input"
                     suffix: ~
