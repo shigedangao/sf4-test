@@ -8,6 +8,7 @@
 
 namespace App\GraphQL\Resolver;
 
+use App\GraphQL\AbstractGraphQLInjector;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -16,7 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * Class BaseResolverMap
  * @package App\GraphQL\Resolver
  */
-class BaseResolverMap extends AbstractResolver
+class BaseResolverMap extends AbstractGraphQLInjector
 {
 
     /**
@@ -42,10 +43,12 @@ class BaseResolverMap extends AbstractResolver
                         return NULL;
                     }
 
-                    $resolver = parent::getContainerByName($fieldName);
-                    if (is_string($resolver)) {
-                       // @TODO see how to handle errors with GraphQL
-                       return NULL;
+                    try {
+                        $resolver = parent::getResolver($fieldName);
+                    } catch (\Exception $e) {
+                        return [
+                            "error" => $e->getMessage()
+                        ];
                     }
 
                     return $resolver->resolve($args);

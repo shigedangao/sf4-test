@@ -13,4 +13,6 @@ interface GraphQLErrorInterface
 {
     public const EMPTY_NS = "Namespace is empty";
     public const MUTATION_NOT_FOUND = "Mutation not found on container";
+    public const QUERY_EMPTY = "The query does not contain any schema";
+    public const CLASS_NOT_FOUND = "The class can not be found in the container";
 }
