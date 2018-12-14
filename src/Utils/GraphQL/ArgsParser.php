@@ -10,6 +10,7 @@ namespace App\Utils\GraphQL;
 
 
 use Overblog\GraphQLBundle\Definition\Argument;
+use Symfony\Component\Yaml\Exception\ParseException;
 
 /**
  * Class ArgsParser
@@ -18,6 +19,10 @@ use Overblog\GraphQLBundle\Definition\Argument;
  */
 class ArgsParser
 {
+    public const CREATE_TYPE = "create";
+    public const DELETE_TYPE = "delete";
+    public const UPDATE_TYPE = "update";
+
     /**
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
      * @param array $wanted
@@ -38,5 +43,36 @@ class ArgsParser
         }
 
         return $filtered;
+    }
+
+    /**
+     * @param string $fieldName
+     * @return array
+     */
+    static function parseMutationArgs(string $fieldName) {
+        $args = preg_split('/(?=[A-Z])/',$fieldName);
+
+        if (!isset($args)) {
+            throw new ParseException("Unable to parse the type of mutation");
+        }
+
+        $mutationType = strtolower($args[0]);
+
+        if ($mutationType === ArgsParser::CREATE_TYPE) {
+            return [
+                'type' => ArgsParser::CREATE_TYPE,
+                'target' => $args[1]
+            ];
+        } else if ($mutationType === ArgsParser::UPDATE_TYPE) {
+            return [
+                'type' => ArgsParser::UPDATE_TYPE,
+                'target' => $args[1]
+            ];
+        } else {
+            return [
+                'type' => ArgsParser::DELETE_TYPE,
+                'target' => $args[1]
+            ];
+        }
     }
 }

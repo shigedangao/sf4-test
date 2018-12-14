@@ -11,6 +11,7 @@ namespace App\GraphQL\Mutation\Airplane;
 
 use App\Common\GraphQL\Mutate;
 use App\Doctrine\Airliner\AirlinerSaver;
+use App\GraphQL\Mutation\AbstractMutation;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
@@ -20,7 +21,7 @@ use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
  *
  * @package App\GraphQL\Mutation\Airplane
  */
-class AirplaneMutation implements MutationInterface, AliasedInterface, Mutate
+class AirplaneMutation extends AbstractMutation implements MutationInterface, AliasedInterface
 {
     /**
      * @var \App\Doctrine\Airliner\AirlinerSaver
@@ -37,14 +38,6 @@ class AirplaneMutation implements MutationInterface, AliasedInterface, Mutate
         $this->saver = $airlinerSaver;
     }
 
-    /**
-     * @param \Overblog\GraphQLBundle\Definition\Argument $args
-     * @return mixed|void
-     */
-    public function mutate(Argument $args) {
-        var_dump("pass into saver");
-        die;
-    }
 
     /**
      * @return array
@@ -55,4 +48,20 @@ class AirplaneMutation implements MutationInterface, AliasedInterface, Mutate
             'mutation' => 'AirplaneMutation'
         ];
     }
+
+    public function insert()
+    {
+        // TODO: Implement insert() method.
+    }
+
+    public function update()
+    {
+        // TODO: Implement update() method.
+    }
+
+    public function delete()
+    {
+        // TODO: Implement delete() method.
+    }
+
 }

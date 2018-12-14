@@ -19,8 +19,24 @@ use Overblog\GraphQLBundle\Definition\Argument;
 interface Mutate
 {
     /**
+     * @param string $operation
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
      * @return mixed
      */
-    public function mutate(Argument $args);
+    public function mutate(string $operation, Argument $args);
+
+    /**
+     * @return mixed
+     */
+    public function insert();
+
+    /**
+     * @return mixed
+     */
+    public function update();
+
+    /**
+     * @return mixed
+     */
+    public function delete();
 }

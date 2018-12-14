@@ -9,6 +9,7 @@
 namespace App\GraphQL\Resolver;
 
 use App\GraphQL\AbstractGraphQLInjector;
+use App\Utils\GraphQL\ArgsParser;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -56,7 +57,23 @@ class BaseResolverMap extends AbstractGraphQLInjector
             ],
             'AirplaneMutation' => [
                self::RESOLVE_FIELD => function($value, Argument $args, \ArrayObject $ctx, ResolveInfo $info) {
+                    $fieldName = $info->fieldName;
+                    if (!isset($fieldName)) {
+                        return NULL;
+                    }
 
+                    try {
+                        $kind = ArgsParser::parseMutationArgs($fieldName);
+                        $mutator = parent::getMutator($kind[1]);
+                    } catch (\Exception $e) {
+                        var_dump($fieldName);
+                        die;
+                        return [
+                          "error" => $e->getMessage()
+                        ];
+                    }
+
+                    return $mutator->mutate($args);
                }
             ]
         ];
