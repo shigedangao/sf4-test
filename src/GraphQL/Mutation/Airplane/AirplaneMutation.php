@@ -10,6 +10,7 @@ namespace App\GraphQL\Mutation\Airplane;
 
 
 use App\Common\Errors\ErrorInterface;
+use App\Doctrine\Airplane\AirplaneRemover;
 use App\Doctrine\Airplane\AirplaneSaver;
 use App\GraphQL\Mutation\AbstractMutation;
 use App\Repository\AirplaneRepository;
@@ -43,19 +44,27 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
     protected $validator;
 
     /**
+     * @var \App\Doctrine\Airplane\AirplaneRemover
+     */
+    protected $remover;
+
+    /**
      * AirplaneMutation constructor.
      *
      * @param \App\Doctrine\Airplane\AirplaneSaver $airplaneSaver
      * @param \App\Repository\AirplaneRepository $airplaneRepository
+     * @param \App\Doctrine\Airplane\AirplaneRemover $airplaneRemover
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
      */
     public function __construct(
         AirplaneSaver $airplaneSaver,
         AirplaneRepository $airplaneRepository,
+        AirplaneRemover $airplaneRemover,
         ValidatorInterface $validator
     ) {
         $this->saver = $airplaneSaver;
         $this->repository = $airplaneRepository;
+        $this->remover = $airplaneRemover;
         $this->validator = $validator;
     }
 
@@ -110,14 +119,36 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
     }
 
     /**
+     * @TODO add an extractor method and handle error
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
-     * @return mixed|void
+     * @return mixed|null
      */
     public function delete(Argument $args)
     {
-        // TODO: Implement delete() method.
+       $data = $args->getRawArguments();
+       $input = $data['input'];
+       $code = $input['id'];
+
+       if (!isset($code)) {
+           var_dump("laaaa");
+           return NULL;
+       }
+
+       $airplane = $this->repository->findOneByCode($code);
+       if (!isset($airplane)) {
+           return NULL;
+       }
+
+       $this->remover->delete($airplane);
+
+       return $code;
     }
 
+    /**
+     * @param \Overblog\GraphQLBundle\Definition\Argument $args
+     * @return \App\Validator\Aircraft\AircraftModel|mixed
+     * @throws \Exception
+     */
     public function validate(Argument $args)
     {
         $model = new AircraftModel();

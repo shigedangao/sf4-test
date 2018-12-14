@@ -49,3 +49,17 @@ mutation AirplaneMutation($object: AirplaneInput!) {
 	"code": "788"
   }
 }
+
+## Delete
+
+mutation AirplaneMutation($code: CodeInput!) {
+  deleteAirplane(input: $code)
+}
+
+### Variables
+
+{
+  "code": {
+    "id": "Super"
+  }
+}
