@@ -53,26 +53,27 @@ class ArgsParser
         $args = preg_split('/(?=[A-Z])/',$fieldName);
 
         if (!isset($args)) {
-            throw new ParseException("Unable to parse the type of mutation");
+            throw new ParseException("Unable to parse the arguments of the mutation ".$fieldName);
         }
 
         $mutationType = strtolower($args[0]);
-
         if ($mutationType === ArgsParser::CREATE_TYPE) {
             return [
-                'type' => ArgsParser::CREATE_TYPE,
-                'target' => $args[1]
-            ];
-        } else if ($mutationType === ArgsParser::UPDATE_TYPE) {
-            return [
-                'type' => ArgsParser::UPDATE_TYPE,
-                'target' => $args[1]
-            ];
-        } else {
-            return [
-                'type' => ArgsParser::DELETE_TYPE,
+                'operation' => ArgsParser::CREATE_TYPE,
                 'target' => $args[1]
             ];
         }
+
+        if ($mutationType === ArgsParser::UPDATE_TYPE) {
+            return [
+                'operation' => ArgsParser::UPDATE_TYPE,
+                'target' => $args[1]
+            ];
+        }
+
+        return [
+            'operation' => ArgsParser::DELETE_TYPE,
+            'target' => $args[1]
+        ];
     }
 }

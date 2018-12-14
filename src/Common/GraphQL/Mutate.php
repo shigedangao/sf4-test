@@ -10,6 +10,7 @@ namespace App\Common\GraphQL;
 
 
 use Overblog\GraphQLBundle\Definition\Argument;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * Interface Mutate
@@ -26,9 +27,10 @@ interface Mutate
     public function mutate(string $operation, Argument $args);
 
     /**
+     * @param \Overblog\GraphQLBundle\Definition\Argument $args
      * @return mixed
      */
-    public function insert();
+    public function insert(Argument $args);
 
     /**
      * @return mixed
@@ -39,4 +41,10 @@ interface Mutate
      * @return mixed
      */
     public function delete();
+
+    /**
+     * @param \Overblog\GraphQLBundle\Definition\Argument $args
+     * @return mixed
+     */
+    public function validate(Argument $args);
 }

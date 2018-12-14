@@ -64,16 +64,16 @@ class BaseResolverMap extends AbstractGraphQLInjector
 
                     try {
                         $kind = ArgsParser::parseMutationArgs($fieldName);
-                        $mutator = parent::getMutator($kind[1]);
+                        $mutator = parent::getMutator($kind['target']);
                     } catch (\Exception $e) {
-                        var_dump($fieldName);
+                        var_dump($e->getMessage());
                         die;
                         return [
                           "error" => $e->getMessage()
                         ];
                     }
 
-                    return $mutator->mutate($args);
+                    return $mutator->mutate($kind['operation'], $args);
                }
             ]
         ];

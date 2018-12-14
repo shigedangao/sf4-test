@@ -55,9 +55,8 @@ class AirplaneSaver implements SaverInterface
     }
 
     /**
-     * Create the entity based on the Model
-     *
-     * @param $model \App\Validator\Aircraft\AircraftModel
+     * @param $model
+     * @return \App\Entity\BaseAircraft|mixed
      */
     public function create($model)
     {
@@ -69,6 +68,7 @@ class AirplaneSaver implements SaverInterface
         $this->airplane->setManufacturer($model->manufacturer);
         $this->airplane->setCode($model->code);
 
+        return $this->airplane;
     }
 
     /**
