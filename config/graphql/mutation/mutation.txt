@@ -1,0 +1,65 @@
+## Add airplanes
+
+mutation AirplaneMutation($object: AirplaneInput!) {
+  createAirplane(input: $object) {
+    name
+    engines
+    distance
+    type
+    code
+    manufacturer
+  }
+}
+
+### Variables
+
+{
+  "object": {
+    "name": "boeing 787-8",
+	"engines": 2,
+	"distance": 4500,
+	"type": "Long",
+	"manufacturer": "Boeing",
+	"code": "788"
+  }
+}
+
+## Update airplanes
+
+mutation AirplaneMutation($object: AirplaneInput!) {
+  updateAirplane(input: $object) {
+    name
+    engines
+    distance
+    type
+    code
+    manufacturer
+  }
+}
+
+### Variables
+
+{
+  "object": {
+    "name": "boeing 787-8",
+	"engines": 2,
+	"distance": 4500,
+	"type": "Long",
+	"manufacturer": "Boeing",
+	"code": "788"
+  }
+}
+
+## Delete
+
+mutation AirplaneMutation($code: CodeInput!) {
+  deleteAirplane(input: $code)
+}
+
+### Variables
+
+{
+  "code": {
+    "id": "Super"
+  }
+}

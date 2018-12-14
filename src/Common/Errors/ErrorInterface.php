@@ -20,4 +20,5 @@ interface ErrorInterface
     public const INVALID_SLUG  = "The passed slug is empty";
     public const NOT_FOUND_ERR = "The param is not found";
     public const ENTITY_NOT_FOUND_ERR = "The object is not found. Can not update";
+    public const EMPTY_INPUT   = "The input data object is empty";
 }

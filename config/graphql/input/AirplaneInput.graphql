@@ -1,0 +1,8 @@
+input AirplaneInput {
+    name: String!
+    engines: Int!
+    distance: Int!
+    type: String!
+    code: String!
+    manufacturer: Manufacturer!
+}
