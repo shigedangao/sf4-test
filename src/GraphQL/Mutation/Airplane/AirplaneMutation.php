@@ -12,6 +12,7 @@ namespace App\GraphQL\Mutation\Airplane;
 use App\Common\Errors\ErrorInterface;
 use App\Doctrine\Airplane\AirplaneSaver;
 use App\GraphQL\Mutation\AbstractMutation;
+use App\Repository\AirplaneRepository;
 use App\Validator\Aircraft\AircraftModel;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
@@ -32,6 +33,11 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
     protected $saver;
 
     /**
+     * @var AirplaneRepository
+     */
+    protected $repository;
+
+    /**
      * @var ValidatorInterface
      */
     protected $validator;
@@ -40,13 +46,16 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
      * AirplaneMutation constructor.
      *
      * @param \App\Doctrine\Airplane\AirplaneSaver $airplaneSaver
+     * @param \App\Repository\AirplaneRepository $airplaneRepository
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
      */
     public function __construct(
         AirplaneSaver $airplaneSaver,
+        AirplaneRepository $airplaneRepository,
         ValidatorInterface $validator
     ) {
         $this->saver = $airplaneSaver;
+        $this->repository = $airplaneRepository;
         $this->validator = $validator;
     }
 
@@ -61,7 +70,13 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
         } catch (\Exception $e) {
             var_dump($e->getMessage());
             die;
-            // do soemthing with the error
+            // do something with the error
+        }
+
+        $object = $this->repository->findOneByCode($model->getCode());
+        if (isset($object)) {
+            // should return that the data is already present...
+            return NULL;
         }
 
         $airplane = $this->saver->create($model);
@@ -70,12 +85,35 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
         return $airplane;
     }
 
-    public function update()
+    /**
+     * @param \Overblog\GraphQLBundle\Definition\Argument $args
+     * @return \App\Entity\BaseAircraft|mixed|null|void
+     */
+    public function update(Argument $args)
     {
-        // TODO: Implement update() method.
+        try {
+            $model = $this->validate($args);
+        } catch (\Exception $e) {
+            // should do something here
+            return NULL;
+        }
+
+        $airplane = $this->repository->findOneByCode($model->getCode());
+        if (!isset($airplane)) {
+            return NULL;
+        }
+
+        $updatedAircraft = $this->saver->create($model);
+        $this->saver->update($airplane);
+
+        return $updatedAircraft;
     }
 
-    public function delete()
+    /**
+     * @param \Overblog\GraphQLBundle\Definition\Argument $args
+     * @return mixed|void
+     */
+    public function delete(Argument $args)
     {
         // TODO: Implement delete() method.
     }

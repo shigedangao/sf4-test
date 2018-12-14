@@ -1,3 +1,4 @@
 type AirplaneMutation {
     createAirplane(input: AirplaneInput!): Airplane
+    updateAirplane(input: AirplaneInput!): Airplane
 }

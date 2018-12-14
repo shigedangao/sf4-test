@@ -32,6 +32,7 @@ services:
     # add the resolver to the container
     App\GraphQL\Mutation\:
         resource: '../src/GraphQL/Mutation'
+        exclude: '../src/GraphQL/Mutation/{AbstractMutation.php}'
         public: true
 
     # add more service definitions when explicit configuration is needed

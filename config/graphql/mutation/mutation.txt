@@ -23,3 +23,29 @@ mutation AirplaneMutation($object: AirplaneInput!) {
 	"code": "788"
   }
 }
+
+## Update airplanes
+
+mutation AirplaneMutation($object: AirplaneInput!) {
+  updateAirplane(input: $object) {
+    name
+    engines
+    distance
+    type
+    code
+    manufacturer
+  }
+}
+
+### Variables
+
+{
+  "object": {
+    "name": "boeing 787-8",
+	"engines": 2,
+	"distance": 4500,
+	"type": "Long",
+	"manufacturer": "Boeing",
+	"code": "788"
+  }
+}
