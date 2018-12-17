@@ -2,19 +2,19 @@
 /**
  * Created by PhpStorm.
  * User: marcintha
- * Date: 11/12/2018
- * Time: 17:08
+ * Date: 17/12/2018
+ * Time: 15:23
  */
 
-namespace App\GraphQL\Mutation\Airplane;
-
+namespace App\GraphQL\Mutation\Airliner;
 
 use App\Common\Errors\ErrorInterface;
-use App\Doctrine\Airplane\AirplaneRemover;
-use App\Doctrine\Airplane\AirplaneSaver;
+use App\Doctrine\Airliner\AirlinerRemover;
+use App\Doctrine\Airliner\AirlinerSaver;
 use App\GraphQL\Mutation\AbstractMutation;
+use App\Repository\Airliner\AirlinersRepository;
 use App\Repository\AirplaneRepository;
-use App\Validator\Aircraft\AircraftModel;
+use App\Validator\Airliners\PassengerModel;
 use GraphQL\Error\UserError;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
@@ -23,21 +23,31 @@ use Overblog\GraphQLBundle\Error\UserErrors;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
- * Class AirplaneMutation
+ * Class AirlinerMutation
  *
- * @package App\GraphQL\Mutation\Airplane
+ * @package App\GraphQL\Mutation\Airliner
  */
-class AirplaneMutation extends AbstractMutation implements MutationInterface, AliasedInterface
+class AirlinerMutation extends AbstractMutation implements MutationInterface, AliasedInterface
 {
     /**
-     * @var \App\Doctrine\Airliner\AirlinerSaver
+     * @var AirlinerSaver
      */
     protected $saver;
 
     /**
-     * @var AirplaneRepository
+     * @var AirlinersRepository
      */
     protected $repository;
+
+    /**
+     * @var AirplaneRepository
+     */
+    protected $airplaneRepository;
+
+    /**
+     * @var AirlinerRemover
+     */
+    protected $remover;
 
     /**
      * @var ValidatorInterface
@@ -45,33 +55,31 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
     protected $validator;
 
     /**
-     * @var \App\Doctrine\Airplane\AirplaneRemover
-     */
-    protected $remover;
-
-    /**
-     * AirplaneMutation constructor.
+     * AirlinerMutation constructor.
      *
-     * @param \App\Doctrine\Airplane\AirplaneSaver $airplaneSaver
+     * @param \App\Doctrine\Airliner\AirlinerSaver $airlinerSaver
+     * @param \App\Repository\Airliner\AirlinersRepository $airlinersRepository
      * @param \App\Repository\AirplaneRepository $airplaneRepository
-     * @param \App\Doctrine\Airplane\AirplaneRemover $airplaneRemover
+     * @param \App\Doctrine\Airliner\AirlinerRemover $airlinerRemover
      * @param \Symfony\Component\Validator\Validator\ValidatorInterface $validator
      */
     public function __construct(
-        AirplaneSaver $airplaneSaver,
+        AirlinerSaver $airlinerSaver,
+        AirlinersRepository $airlinersRepository,
         AirplaneRepository $airplaneRepository,
-        AirplaneRemover $airplaneRemover,
+        AirlinerRemover $airlinerRemover,
         ValidatorInterface $validator
     ) {
-        $this->saver = $airplaneSaver;
-        $this->repository = $airplaneRepository;
-        $this->remover = $airplaneRemover;
+        $this->saver = $airlinerSaver;
+        $this->repository = $airlinersRepository;
+        $this->airplaneRepository = $airplaneRepository;
+        $this->remover = $airlinerRemover;
         $this->validator = $validator;
     }
 
     /**
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
-     * @return mixed
+     * @return \App\Entity\Passenger\PassengerAirliners
      */
     public function insert(Argument $args)
     {
@@ -84,20 +92,20 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
             ]);
         }
 
-        $object = $this->repository->findOneByCode($model->getCode());
+        $object = $this->repository->findByReg($model->getReg());
         if (isset($object)) {
             throw new UserError(ErrorInterface::PRESENT_ERR);
         }
 
-        $airplane = $this->saver->create($model);
+        $airliner = $this->saver->create($model);
         $this->saver->save();
 
-        return $airplane;
+        return $airliner;
     }
 
     /**
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
-     * @return \App\Entity\BaseAircraft
+     * @return PassengerModel
      */
     public function update(Argument $args)
     {
@@ -110,20 +118,20 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
             ]);
         }
 
-        $airplane = $this->repository->findOneByCode($model->getCode());
-        if (!isset($airplane)) {
+        $airliner = $this->repository->findByReg($model->getReg());
+        if (!isset($airliner)) {
             throw new UserError(ErrorInterface::ENTITY_NOT_FOUND_ERR);
         }
 
-        $updatedAircraft = $this->saver->create($model);
-        $this->saver->update($airplane);
+        $airliner = $this->saver->create($model);
+        $this->saver->update($airliner);
 
-        return $updatedAircraft;
+        return $airliner;
     }
 
     /**
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
-     * @return mixed|null
+     * @return String
      */
     public function delete(Argument $args)
     {
@@ -132,36 +140,43 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
             throw new UserError(ErrorInterface::NOT_FOUND_ERR);
         }
 
-        $airplane = $this->repository->findOneByCode($input->id);
-        if (!isset($airplane)) {
+        $airliner = $this->repository->findByReg($input->id);
+        if (!isset($airliner)) {
             throw new UserError(ErrorInterface::ENTITY_NOT_FOUND_ERR);
         }
 
-        $this->remover->delete($airplane);
+        $this->remover->delete($airliner);
 
         return $input->id;
     }
 
     /**
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
-     * @return \App\Validator\Aircraft\AircraftModel|mixed
-     * @throws \Exception
+     * @return \App\Validator\Airliners\PassengerModel|mixed
+     * @throws \ReflectionException
      */
     public function validate(Argument $args)
     {
-        $model = new AircraftModel();
+        $model = new PassengerModel();
         $cls = new \ReflectionClass($model);
         $input = $this->extract($args, $cls->getDefaultProperties());
         if (!isset($input)) {
             throw new UserError(ErrorInterface::EMPTY_INPUT);
         }
 
-        $model->setName($input->name);
-        $model->setEngines($input->engines);
-        $model->setDistance($input->distance);
-        $model->setType($input->type);
-        $model->setManufacturer($input->manufacturer);
-        $model->setCode($input->code);
+        // get the aircraft based on the code
+        $aircraft = $this->airplaneRepository->findOneByCode($input->aircraft);
+        if (!isset($aircraft)) {
+            throw new UserError(sprintf("aircraft with code %s can not be found", $input->aircraft));
+        }
+
+        $model->setReg($input->reg);
+        $model->setThrust($input->thrust);
+        $model->setAisle($input->aisle);
+        $model->setCargo($input->cargo);
+        $model->setPassenger($input->passenger);
+        $model->setOwner($input->owner);
+        $model->setAircraft($aircraft);
 
         $errors = $this->validator->validate($model);
         if (count($errors) > 0) {
@@ -177,7 +192,7 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
     public static function getAliases()
     {
         return [
-            'mutation' => 'AirplaneMutation'
+            'mutation'  => 'AirlinerMutation'
         ];
     }
 }

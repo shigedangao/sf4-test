@@ -56,7 +56,7 @@ class AirlinerSaver implements SaverInterface
 
     /**
      * @param $model \App\Validator\Airliners\PassengerModel
-     * @return mixed|void
+     * @return PassengerAirliners
      */
     public function create($model)
     {
@@ -70,6 +70,8 @@ class AirlinerSaver implements SaverInterface
         $this->airliners->setAisle($model->aisle);
         $this->airliners->setReg($model->reg);
         $this->airliners->setAircraft($model->aircraft);
+
+        return $this->airliners;
     }
 
     /**
