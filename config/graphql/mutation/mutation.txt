@@ -83,12 +83,12 @@ mutation AirplaneMutation($object: AirlinerInput!) {
 
 {
   "object": {
-		"thrust": 74100,
-		"aisle": 2,
-		"reg": "B-2727",
-		"passenger": 245,
-		"owner": "China southern airlines",
-		"cargo": 20.0,
+	"thrust": 74100,
+	"aisle": 2,
+	"reg": "B-2727",
+	"passenger": 245,
+	"owner": "China southern airlines",
+	"cargo": 20.0,
     "aircraft": "789"
   }
 }
@@ -112,13 +112,27 @@ mutation AirplaneMutation($object: AirlinerInput!) {
 
 {
   "object": {
-		"thrust": 74100,
-		"aisle": 2,
-		"reg": "B-2727",
-		"passenger": 245,
-		"owner": "China southern airlines",
-		"cargo": 20.0,
+	"thrust": 74100,
+	"aisle": 2,
+	"reg": "B-2727",
+	"passenger": 245,
+	"owner": "China southern airlines",
+	"cargo": 20.0,
     "aircraft": "789"
+  }
+}
+
+## Delete
+
+mutation AirplaneMutation($code: CodeInput!) {
+  deleteAirliner(input: $code)
+}
+
+### Variables
+
+{
+  "code": {
+    "id": "Super"
   }
 }
 
