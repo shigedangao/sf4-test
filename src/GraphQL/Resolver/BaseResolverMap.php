@@ -8,8 +8,10 @@
 
 namespace App\GraphQL\Resolver;
 
+use App\Common\Errors\GraphQLErrorInterface;
 use App\GraphQL\AbstractGraphQLInjector;
 use App\Utils\GraphQL\ArgsParser;
+use GraphQL\Error\UserError;
 use GraphQL\Type\Definition\ResolveInfo;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -41,17 +43,10 @@ class BaseResolverMap extends AbstractGraphQLInjector
                 self::RESOLVE_FIELD => function($value, Argument $args, \ArrayObject $ctx, ResolveInfo $info) {
                     $fieldName = $info->fieldName;
                     if (!isset($fieldName)) {
-                        return NULL;
+                        throw new UserError(GraphQLErrorInterface::FIELD_NAME_EMPTY);
                     }
 
-                    try {
-                        $resolver = parent::getResolver($fieldName);
-                    } catch (\Exception $e) {
-                        return [
-                            "error" => $e->getMessage()
-                        ];
-                    }
-
+                    $resolver = parent::getResolver($fieldName);
                     return $resolver->resolve($args);
                 }
             ],
@@ -59,21 +54,13 @@ class BaseResolverMap extends AbstractGraphQLInjector
                self::RESOLVE_FIELD => function($value, Argument $args, \ArrayObject $ctx, ResolveInfo $info) {
                     $fieldName = $info->fieldName;
                     if (!isset($fieldName)) {
-                        return NULL;
+                        throw new UserError(GraphQLErrorInterface::FIELD_NAME_EMPTY);
                     }
 
-                    try {
-                        $kind = ArgsParser::parseMutationArgs($fieldName);
-                        $mutator = parent::getMutator($kind['target']);
-                    } catch (\Exception $e) {
-                        var_dump($e->getMessage());
-                        die;
-                        return [
-                          "error" => $e->getMessage()
-                        ];
-                    }
+                   $kind = ArgsParser::parseMutationArgs($fieldName);
+                   $mutator = parent::getMutator($kind['target']);
 
-                    return $mutator->mutate($kind['operation'], $args);
+                   return $mutator->mutate($kind['operation'], $args);
                }
             ]
         ];

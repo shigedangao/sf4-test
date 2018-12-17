@@ -9,8 +9,8 @@
 namespace App\Utils\GraphQL;
 
 
+use GraphQL\Error\UserError;
 use Overblog\GraphQLBundle\Definition\Argument;
-use Symfony\Component\Yaml\Exception\ParseException;
 
 /**
  * Class ArgsParser
@@ -53,7 +53,7 @@ class ArgsParser
         $args = preg_split('/(?=[A-Z])/',$fieldName);
 
         if (!isset($args)) {
-            throw new ParseException("Unable to parse the arguments of the mutation ".$fieldName);
+            throw new UserError(sprintf("Unable to parse the arguments of the mutation %s", $fieldName));
         }
 
         $mutationType = strtolower($args[0]);
