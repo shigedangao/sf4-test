@@ -10,8 +10,8 @@ namespace App\GraphQL;
 
 use App\Common\Errors\GraphQLErrorInterface;
 use App\Common\GraphQL\NamespaceInterface;
+use GraphQL\Error\UserError;
 use Overblog\GraphQLBundle\Resolver\ResolverMap;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
@@ -71,7 +71,7 @@ abstract class AbstractGraphQLInjector extends ResolverMap implements NamespaceI
      */
     protected function getClsFromStr(string $ns) {
         if (!isset($ns)) {
-            throw new Exception(GraphQLErrorInterface::EMPTY_NS);
+            throw new UserError(GraphQLErrorInterface::EMPTY_NS);
         }
 
         $class = $this->container->get($ns);
@@ -79,7 +79,7 @@ abstract class AbstractGraphQLInjector extends ResolverMap implements NamespaceI
             return $class;
         }
 
-        throw new Exception(GraphQLErrorInterface::CLASS_NOT_FOUND);
+        throw new UserError(GraphQLErrorInterface::CLASS_NOT_FOUND);
     }
 
     /**
@@ -88,7 +88,7 @@ abstract class AbstractGraphQLInjector extends ResolverMap implements NamespaceI
      */
     public function getResolver(string $query) {
         if (!isset($query)) {
-            throw new Exception(GraphQLErrorInterface::QUERY_EMPTY);
+            throw new UserError(GraphQLErrorInterface::QUERY_EMPTY);
         }
 
         $ns = $this->buildNamespace(NamespaceInterface::BASE_RESOLVER_NAMESPACE, $query);
@@ -103,7 +103,7 @@ abstract class AbstractGraphQLInjector extends ResolverMap implements NamespaceI
      */
     public function getMutator(string $query) {
         if (!isset($query)) {
-            throw new Exception(GraphQLErrorInterface::QUERY_EMPTY);
+            throw new UserError(GraphQLErrorInterface::QUERY_EMPTY);
         }
 
         $ns = $this->buildNamespace(NamespaceInterface::BASE_MUTATION_NAMESPACE, $query);

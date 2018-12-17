@@ -18,6 +18,14 @@ use Overblog\GraphQLBundle\Definition\Argument;
  */
 interface Mutate
 {
+
+    /**
+     * @param \Overblog\GraphQLBundle\Definition\Argument $args
+     * @param array $given
+     * @return \stdClass
+     */
+    public function extract(Argument $args, array $given): \stdClass;
+
     /**
      * @param string $operation
      * @param \Overblog\GraphQLBundle\Definition\Argument $args

@@ -15,11 +15,12 @@ use App\Doctrine\Airplane\AirplaneSaver;
 use App\GraphQL\Mutation\AbstractMutation;
 use App\Repository\AirplaneRepository;
 use App\Validator\Aircraft\AircraftModel;
+use GraphQL\Error\UserError;
 use Overblog\GraphQLBundle\Definition\Argument;
 use Overblog\GraphQLBundle\Definition\Resolver\AliasedInterface;
 use Overblog\GraphQLBundle\Definition\Resolver\MutationInterface;
+use Overblog\GraphQLBundle\Error\UserErrors;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
-use Symfony\Component\Yaml\Exception\ParseException;
 
 /**
  * Class AirplaneMutation
@@ -77,15 +78,15 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
         try {
             $model = $this->validate($args);
         } catch (\Exception $e) {
-            var_dump($e->getMessage());
-            die;
-            // do something with the error
+            throw new UserErrors([
+                ErrorInterface::ASSERT_ERR,
+                sprintf("Error: %s", $e->getTraceAsString())
+            ]);
         }
 
         $object = $this->repository->findOneByCode($model->getCode());
         if (isset($object)) {
-            // should return that the data is already present...
-            return NULL;
+            throw new UserError(ErrorInterface::PRESENT_ERR);
         }
 
         $airplane = $this->saver->create($model);
@@ -96,20 +97,22 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
 
     /**
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
-     * @return \App\Entity\BaseAircraft|mixed|null|void
+     * @return \App\Entity\BaseAircraft
      */
     public function update(Argument $args)
     {
         try {
             $model = $this->validate($args);
         } catch (\Exception $e) {
-            // should do something here
-            return NULL;
+            throw new UserErrors([
+                ErrorInterface::ASSERT_ERR,
+                sprintf("Error: %s", $e->getTraceAsString())
+            ]);
         }
 
         $airplane = $this->repository->findOneByCode($model->getCode());
         if (!isset($airplane)) {
-            return NULL;
+            throw new UserError(ErrorInterface::ENTITY_NOT_FOUND_ERR);
         }
 
         $updatedAircraft = $this->saver->create($model);
@@ -119,29 +122,24 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
     }
 
     /**
-     * @TODO add an extractor method and handle error
      * @param \Overblog\GraphQLBundle\Definition\Argument $args
      * @return mixed|null
      */
     public function delete(Argument $args)
     {
-       $data = $args->getRawArguments();
-       $input = $data['input'];
-       $code = $input['id'];
+        $input = $this->extract($args, ['id' => null]);
+        if (!isset($input)) {
+            throw new UserError(ErrorInterface::NOT_FOUND_ERR);
+        }
 
-       if (!isset($code)) {
-           var_dump("laaaa");
-           return NULL;
-       }
+        $airplane = $this->repository->findOneByCode($input->id);
+        if (!isset($airplane)) {
+            throw new UserError(ErrorInterface::ENTITY_NOT_FOUND_ERR);
+        }
 
-       $airplane = $this->repository->findOneByCode($code);
-       if (!isset($airplane)) {
-           return NULL;
-       }
+        $this->remover->delete($airplane);
 
-       $this->remover->delete($airplane);
-
-       return $code;
+        return $input->id;
     }
 
     /**
@@ -152,24 +150,23 @@ class AirplaneMutation extends AbstractMutation implements MutationInterface, Al
     public function validate(Argument $args)
     {
         $model = new AircraftModel();
-        $data = $args->getRawArguments();
-        $input = $data['input'];
-
+        $cls = new \ReflectionClass($model);
+        $input = $this->extract($args, $cls->getDefaultProperties());
         if (!isset($input)) {
-            throw new ParseException(ErrorInterface::EMPTY_INPUT);
+            throw new UserError(ErrorInterface::EMPTY_INPUT);
         }
 
-        $model->setName($input['name']);
-        $model->setEngines($input['engines']);
-        $model->setDistance($input['distance']);
-        $model->setType($input['type']);
-        $model->setManufacturer($input['manufacturer']);
-        $model->setCode($input['code']);
+        $model->setName($input->name);
+        $model->setEngines($input->engines);
+        $model->setDistance($input->distance);
+        $model->setType($input->type);
+        $model->setManufacturer($input->manufacturer);
+        $model->setCode($input->code);
 
         $errors = $this->validator->validate($model);
 
         if (count($errors) > 0) {
-            throw new \Exception(ErrorInterface::ASSERT_ERR);
+            throw new UserError(ErrorInterface::ASSERT_ERR);
         }
 
         return $model;

@@ -19,6 +19,6 @@ interface ErrorInterface
     public const PRESENT_ERR   = "The data is already present in the database";
     public const INVALID_SLUG  = "The passed slug is empty";
     public const NOT_FOUND_ERR = "The param is not found";
-    public const ENTITY_NOT_FOUND_ERR = "The object is not found. Can not update";
+    public const ENTITY_NOT_FOUND_ERR = "The object is not found. Can't do update / delete";
     public const EMPTY_INPUT   = "The input data object is empty";
 }
