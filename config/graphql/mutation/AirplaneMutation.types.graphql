@@ -1,5 +1,11 @@
 type AirplaneMutation {
+    # Airplane #
     createAirplane(input: AirplaneInput!): Airplane
     updateAirplane(input: AirplaneInput!): Airplane
     deleteAirplane(input: CodeInput!): String
+
+    # Airliner #
+    createAirliner(input: AirlinerInput!): Airliner
+    updateAirliner(input: AirlinerInput!): Airliner
+    deleteAirliner(input: CodeInput!): String
 }

@@ -63,3 +63,63 @@ mutation AirplaneMutation($code: CodeInput!) {
     "id": "Super"
   }
 }
+
+## Add airliners
+
+mutation AirplaneMutation($object: AirlinerInput!) {
+  createAirliner(input: $object) {
+    thrust
+    cargo
+    aisle
+    reg
+    aircraft {
+      name
+      code
+    }
+  }
+}
+
+### Variables
+
+{
+  "object": {
+		"thrust": 74100,
+		"aisle": 2,
+		"reg": "B-2727",
+		"passenger": 245,
+		"owner": "China southern airlines",
+		"cargo": 20.0,
+    "aircraft": "789"
+  }
+}
+
+## Update airliners
+
+mutation AirplaneMutation($object: AirlinerInput!) {
+  updateAirliner(input: $object) {
+    thrust
+    cargo
+    aisle
+    reg
+    aircraft {
+      name
+      code
+    }
+  }
+}
+
+### Variables
+
+{
+  "object": {
+		"thrust": 74100,
+		"aisle": 2,
+		"reg": "B-2727",
+		"passenger": 245,
+		"owner": "China southern airlines",
+		"cargo": 20.0,
+    "aircraft": "789"
+  }
+}
+
+

@@ -1,0 +1,9 @@
+input AirlinerInput {
+    passenger: Int!
+    owner: String!
+    thrust: Float!
+    cargo: Float!
+    aisle: Int!
+    reg: String!
+    aircraft: String!
+}
