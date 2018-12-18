@@ -21,7 +21,7 @@ class UserModel
      * @var string
      *
      * @Assert\NotBlank()
-     * @Assert\Length(min="5", max="255")
+     * @Assert\Length(min="1", max="255")
      */
     public $username;
 
@@ -29,7 +29,7 @@ class UserModel
      * @var string
      *
      * @Assert\NotBlank()
-     * @Assert\Length(min="5", max="255")
+     * @Assert\Length(min="1", max="255")
      */
     public $password;
 

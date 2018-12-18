@@ -64,6 +64,7 @@ class AuthController extends AbstractController
         $form->submit($data);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $current = $this->repo->findByUsername($model->username);
             if (isset($current)) {
                 return new JsonResponse([
@@ -72,11 +73,21 @@ class AuthController extends AbstractController
             }
 
             $this->saver->create($model);
-            $this->saver->save();
+            $err = $this->saver->save();
+
+            if (isset($err)) {
+                return new JsonResponse([
+                    'error' => $err
+                ]);
+            }
+
+            return new JsonResponse([
+                'success' => 'insert'
+            ]);
         }
 
         return new JsonResponse([
-            'success' => 'insert'
+            'error' => 'form not valid'
         ]);
     }
 

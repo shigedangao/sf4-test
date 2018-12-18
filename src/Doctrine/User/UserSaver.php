@@ -61,11 +61,15 @@ class UserSaver implements SaverInterface
     }
 
     /**
-     * @return mixed|void
+     * @return mixed|string
      */
     public function save() {
-        $this->em->persist($this->user);
-        $this->em->flush();
+        try {
+            $this->em->persist($this->user);
+            $this->em->flush();
+        } catch (\Exception $e) {
+            return $e->getMessage();
+        }
     }
 
     public function update($model) {

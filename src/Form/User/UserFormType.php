@@ -30,12 +30,7 @@ class UserFormType extends AbstractFormType
         $builder
             ->add('username', TextType::class)
             ->add('password', TextType::class)
-            ->add('roles', TextType::class, [
-                'attr' => [
-                    'user' => 'user',
-                    'admin' => 'admin'
-                ]
-            ])
+            ->add('roles', TextType::class)
             ->add('save', SubmitType::class);
     }
 }
