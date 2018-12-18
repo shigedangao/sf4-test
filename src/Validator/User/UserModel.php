@@ -23,7 +23,7 @@ class UserModel
      * @Assert\NotBlank()
      * @Assert\Length(min="5", max="255")
      */
-    protected $username;
+    public $username;
 
     /**
      * @var string
@@ -31,7 +31,7 @@ class UserModel
      * @Assert\NotBlank()
      * @Assert\Length(min="5", max="255")
      */
-    protected $password;
+    public $password;
 
     /**
      * @var string
@@ -39,5 +39,5 @@ class UserModel
      * @Assert\NotBlank()
      * @Assert\Choice({"user", "admin"})
      */
-    protected $roles;
+    public $roles;
 }

@@ -10,11 +10,13 @@ namespace App\Entity\User;
 
 
 use Symfony\Component\Security\Core\User\UserInterface;
+use Doctrine\ORM\Mapping as ORM;
 
 /**
  * Class User
  *
  * @package App\Entity\User
+ * @ORM\Entity
  */
 class User implements UserInterface
 {
@@ -94,5 +96,29 @@ class User implements UserInterface
 
     public function eraseCredentials()
     {
+    }
+
+    /**
+     * @param string $username
+     */
+    public function setUsername(string $username): void
+    {
+        $this->username = $username;
+    }
+
+    /**
+     * @param string $password
+     */
+    public function setPassword(string $password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * @param string $roles
+     */
+    public function setRoles(string $roles): void
+    {
+        $this->roles = $roles;
     }
 }
