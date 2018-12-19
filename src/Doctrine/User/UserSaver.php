@@ -57,7 +57,7 @@ class UserSaver implements SaverInterface
     public function create($model) {
         $this->user = new User($model->username);
         $this->user->setPassword($this->encoder->encodePassword($this->user, $model->password));
-        $this->user->setRoles("user");
+        $this->user->setRoles($model->roles);
     }
 
     /**

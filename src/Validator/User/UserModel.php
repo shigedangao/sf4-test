@@ -37,7 +37,7 @@ class UserModel
      * @var string
      *
      * @Assert\NotBlank()
-     * @Assert\Choice({"user", "admin"})
+     * @Assert\Choice({"ROLE_USER", "ROLE_ADMIN"})
      */
     public $roles;
 }
