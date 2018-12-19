@@ -1,7 +1,8 @@
 security:
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
-        in_memory: { memory: ~ }
+        app.provider:
+            id: App\Security\UserProvider
 
     encoders:
         App\Entity\User\User:
@@ -12,8 +13,7 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
-        main:
-            anonymous: true
+
         login:
             pattern: ^/api/login
             stateless: true
@@ -29,6 +29,9 @@ security:
             guard:
                 authenticators:
                     - lexik_jwt_authentication.jwt_token_authenticator
+
+        main:
+            anonymous: true
 
             # activate different ways to authenticate
 

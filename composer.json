@@ -69,6 +69,7 @@
     "require-dev": {
         "overblog/graphiql-bundle": "^0.1.1",
         "symfony/maker-bundle": "^1.9",
+        "symfony/profiler-pack": "^1.0",
         "symfony/web-server-bundle": "4.2.*"
     }
 }

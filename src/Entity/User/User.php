@@ -9,6 +9,7 @@
 namespace App\Entity\User;
 
 
+use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -18,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @package App\Entity\User
  * @ORM\Entity
  */
-class User implements UserInterface
+class User implements UserInterface, EquatableInterface
 {
 
     /**
@@ -47,7 +48,7 @@ class User implements UserInterface
     /**
      * @var string
      *
-     * @ORM\Column(name="roles", type="string")
+     * @ORM\Column(name="roles", type="array")
      */
     protected $roles;
 
@@ -59,12 +60,13 @@ class User implements UserInterface
     public function __construct(string $username)
     {
         $this->username = $username;
+        $this->roles = [];
     }
 
     /**
      * @return string
      */
-    public function getRoles(): string
+    public function getRoles(): array
     {
         return $this->roles;
     }
@@ -119,6 +121,31 @@ class User implements UserInterface
      */
     public function setRoles(string $roles): void
     {
-        $this->roles = $roles;
+        array_push($this->roles, $roles);
+    }
+
+    /**
+     * @param \Symfony\Component\Security\Core\User\UserInterface $user
+     * @return bool
+     */
+    public function isEqualTo(UserInterface $user)
+    {
+        if (!$user instanceof User) {
+            return false;
+        }
+
+        if ($this->password !== $user->getPassword()) {
+            return false;
+        }
+
+        if ($this->salt !== $user->getSalt()) {
+            return false;
+        }
+
+        if ($this->username !== $user->getUsername()) {
+            return false;
+        }
+
+        return true;
     }
 }
