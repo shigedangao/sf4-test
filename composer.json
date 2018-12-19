@@ -7,6 +7,7 @@
         "ext-iconv": "*",
         "ext-json": "*",
         "doctrine/annotations": "^1.6",
+        "lexik/jwt-authentication-bundle": "^2.6",
         "overblog/graphql-bundle": "^0.11.9",
         "symfony/console": "4.2.*",
         "symfony/dotenv": "4.2.*",
@@ -14,6 +15,7 @@
         "symfony/form": "4.2.*",
         "symfony/framework-bundle": "4.2.*",
         "symfony/orm-pack": "^1.0",
+        "symfony/security-bundle": "4.2.*",
         "symfony/serializer": "4.2.*",
         "symfony/validator": "4.2.*",
         "symfony/yaml": "4.2.*"
@@ -67,6 +69,7 @@
     "require-dev": {
         "overblog/graphiql-bundle": "^0.1.1",
         "symfony/maker-bundle": "^1.9",
+        "symfony/profiler-pack": "^1.0",
         "symfony/web-server-bundle": "4.2.*"
     }
 }

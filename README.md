@@ -22,3 +22,14 @@ This project use the OverBlog GraphQL bundle. You can debug the graphql using th
 
 - Example of queries are available in the ```config/graphql/query/query.example.txt```
 - Example of mutation are available in the ```config/graphql/mutation/mutation.txt```
+
+### Usage of graphiql
+
+If you want to use graphiql. Enable the graphql endpoint w/o security. E.g below:
+
+```yaml 
+access_control:
+    - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+    #- { path: ^/api/graphql, roles: [ROLE_USER, ROLE_ADMIN] }
+    - { path: ^/api/graphql, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+```
